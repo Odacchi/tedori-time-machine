@@ -54,12 +54,12 @@ const ComparisonNote = ({ era }: ComparisonNoteProps) => {
     );
 };
 
-export function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, input }: Props) {
+function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, input }: Props) {
     if (isSalaryZero) {
         return (
-            <Card className="border-l-4 border-l-amber-500 flex flex-col h-full shadow-md">
-                <CardHeader className="pb-2">
-                    <CardTitle className="flex items-center gap-2 text-amber-700">
+            <Card className="flex flex-col h-full overflow-hidden border border-amber-200 shadow-[0_8px_30px_-12px_rgba(251,191,36,0.4)]">
+                <CardHeader className="pb-2 bg-transparent">
+                    <CardTitle className="flex items-center gap-2 text-amber-600">
                         <BriefcaseBusiness className="w-5 h-5" />
                         まずは収入を入力してください
                     </CardTitle>
@@ -169,15 +169,19 @@ export function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = fals
         <div ref={captureRef} className="h-full relative">
             <Card
                 className={cn(
-                    "flex flex-col gap-0 h-full shadow-md overflow-hidden border-l-4",
-                    isDown ? "border-l-red-500" : "border-l-green-500",
-                    isCapturing && "border-l-transparent"
+                    "flex flex-col gap-0 h-full overflow-hidden border transition-all duration-300",
+                    isDown
+                        ? "border-[#e58c8c] shadow-[0_8px_30px_-12px_rgba(229,140,140,0.4)]"
+                        : "border-[#7dc6a1] shadow-[0_8px_30px_-12px_rgba(125,198,161,0.4)]",
+                    isCapturing && "shadow-none"
                 )}
             >
-                <CardHeader className="pb-2 bg-muted/10">
+                <CardHeader className={cn(
+                    "pb-2 bg-transparent"
+                )}>
                     <div className="flex items-center justify-between gap-3">
                         <CardTitle className="flex items-center gap-2">
-                            {isDown ? <TrendingDown className="w-5 h-5 text-red-500" /> : <TrendingUp className="w-5 h-5 text-green-500" />}
+                            {isDown ? <TrendingDown className="w-5 h-5 text-[#e58c8c]" /> : <TrendingUp className="w-5 h-5 text-[#7dc6a1]" />}
                             手取り比較
                         </CardTitle>
                         <Tabs
@@ -236,18 +240,18 @@ export function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = fals
                             </div>
                         </div>
 
-                        <div className={cn("text-center px-6 py-2 rounded-xl border-2 w-full max-w-sm", isDown ? "bg-red-50 border-red-100" : "bg-green-50 border-green-100")}>
-                            <p className={cn("text-[10px] font-bold uppercase tracking-wider mb-0.5", isDown ? "text-red-600" : "text-green-600")}>
+                        <div className={cn("text-center px-6 py-3 rounded-xl border-2 w-full max-w-sm transition-colors", isDown ? "bg-red-50 border-red-200" : "bg-emerald-50 border-emerald-200")}>
+                            <p className={cn("text-[10px] font-bold uppercase tracking-wider mb-0.5", isDown ? "text-red-600" : "text-emerald-600")}>
                                 DIFFERENCE
                             </p>
                             <div className="flex items-baseline justify-center gap-1">
-                                <span className={cn("text-3xl font-black tracking-tight", isDown ? "text-red-600" : "text-green-600")}>
+                                <span className={cn("text-3xl font-black tracking-tight drop-shadow-sm", isDown ? "text-red-600" : "text-emerald-600")}>
                                     {isDown ? "△" : "+"}
                                     {(absDiff / 10000).toLocaleString()}
                                 </span>
-                                <span className={cn("text-sm font-bold", isDown ? "text-red-600" : "text-green-600")}>万円</span>
+                                <span className={cn("text-sm font-bold", isDown ? "text-red-600" : "text-emerald-600")}>万円</span>
                             </div>
-                            <p className={cn("text-[10px] mt-0.5 font-medium", isDown ? "text-red-500/80" : "text-green-500/80")}>
+                            <p className={cn("text-[10px] mt-0.5 font-bold", isDown ? "text-red-600/90" : "text-emerald-600/90")}>
                                 （月あたり約 {monthlyDiff.toLocaleString()}円の{isDown ? "減少" : "増加"}）
                             </p>
                         </div>
@@ -383,3 +387,5 @@ export function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = fals
         </div>
     );
 }
+
+export { DiffHighlightCard };
