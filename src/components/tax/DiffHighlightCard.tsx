@@ -17,6 +17,8 @@ type Props = {
         label: string;
         baseNetIncome: number;
         currentNetIncome: number;
+        baseLaborCost: number;
+        currentLaborCost: number;
         diffNet: number; // 2025 - base
         percentDownOnGross: number;
         percentDownOnLaborCost: number;
@@ -191,10 +193,10 @@ export function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = fals
                 </CardHeader>
 
                 {/* Add extra bottom padding while capturing so the watermark has breathing room */}
-                <CardContent className={cn("space-y-6 flex-1 pt-6 pb-8", isCapturing && "pb-4")}>
+                <CardContent className={cn("space-y-4 flex-1 pt-4 pb-5", isCapturing && "pb-3")}>
                     {/* Assumptions Header */}
                     {input && (
-                        <div className="flex flex-col items-center justify-center pb-4 border-b border-dashed">
+                        <div className="flex flex-col items-center justify-center pb-2 border-b border-dashed">
                             <div className="flex items-center gap-6">
                                 <div className="text-center">
                                     <p className="text-[10px] text-muted-foreground font-medium mb-0.5">額面年収</p>
@@ -213,7 +215,7 @@ export function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = fals
                     )}
 
                     {/* Main Comparison Display */}
-                    <div className="flex flex-col items-center justify-center space-y-4">
+                    <div className="flex flex-col items-center justify-center space-y-2">
                         <div className="flex items-center justify-center gap-4 w-full max-w-sm">
                             <div className="text-center flex-1">
                                 <p className="text-xs text-muted-foreground font-medium mb-1">{selectedComparison.label}</p>
@@ -234,8 +236,8 @@ export function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = fals
                             </div>
                         </div>
 
-                        <div className={cn("text-center px-6 py-3 rounded-xl border-2 w-full max-w-sm", isDown ? "bg-red-50 border-red-100" : "bg-green-50 border-green-100")}>
-                            <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", isDown ? "text-red-600" : "text-green-600")}>
+                        <div className={cn("text-center px-6 py-2 rounded-xl border-2 w-full max-w-sm", isDown ? "bg-red-50 border-red-100" : "bg-green-50 border-green-100")}>
+                            <p className={cn("text-[10px] font-bold uppercase tracking-wider mb-0.5", isDown ? "text-red-600" : "text-green-600")}>
                                 DIFFERENCE
                             </p>
                             <div className="flex items-baseline justify-center gap-1">
@@ -245,8 +247,18 @@ export function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = fals
                                 </span>
                                 <span className={cn("text-sm font-bold", isDown ? "text-red-600" : "text-green-600")}>万円</span>
                             </div>
-                            <p className={cn("text-xs mt-1 font-medium", isDown ? "text-red-500/80" : "text-green-500/80")}>
+                            <p className={cn("text-[10px] mt-0.5 font-medium", isDown ? "text-red-500/80" : "text-green-500/80")}>
                                 （月あたり約 {monthlyDiff.toLocaleString()}円の{isDown ? "減少" : "増加"}）
+                            </p>
+                        </div>
+
+                        {/* Labor Cost Comparison */}
+                        <div className="text-center">
+                            <p className="text-[10px] text-muted-foreground">
+                                <span className="inline-block bg-slate-100 rounded px-1.5 py-0.5 mr-1">会社から見た人件費</span>
+                                {(selectedComparison.baseLaborCost / 10000).toLocaleString()}万円
+                                <ArrowRight className="w-3 h-3 inline mx-1" />
+                                {(selectedComparison.currentLaborCost / 10000).toLocaleString()}万円
                             </p>
                         </div>
                     </div>
@@ -259,7 +271,7 @@ export function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = fals
                             </p>
                             <div className="border rounded-lg p-3 bg-muted/30">
                                 <div className="flex flex-col gap-3">
-                                    <div className="h-32 w-full">
+                                    <div className="h-24 w-full">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <BarChart
                                                 data={barData}

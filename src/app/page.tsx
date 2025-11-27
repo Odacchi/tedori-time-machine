@@ -49,6 +49,8 @@ function TedoriTimeMachine() {
         label,
         baseNetIncome: base.breakdown.netIncome,
         currentNetIncome: result2025.breakdown.netIncome,
+        baseLaborCost: base.breakdown.totalLaborCost,
+        currentLaborCost: result2025.breakdown.totalLaborCost,
         diffNet,
         percentDownOnGross: grossRateBase > 0 ? (result2025.breakdown.netRateOnGross / grossRateBase - 1) * 100 : 0,
         percentDownOnLaborCost: laborRateBase > 0 ? (result2025.breakdown.netRateOnLaborCost / laborRateBase - 1) * 100 : 0,
