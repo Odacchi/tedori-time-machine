@@ -9,7 +9,7 @@ import { TaxForm } from "@/components/tax/TaxForm";
 import { TaxResultCard } from "@/components/tax/TaxResultCard";
 import { DiffHighlightCard } from "@/components/tax/DiffHighlightCard";
 import { GraphTabs } from "@/components/tax/GraphTabs";
-import { ShareOnXButton } from "@/components/tax/ShareOnXButton";
+import { ShareButtons } from "@/components/tax/ShareButtons";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 
 function TedoriTimeMachine() {
@@ -107,13 +107,25 @@ function TedoriTimeMachine() {
                   会社が負担する社会保険料を含めた「人件費」のうち、どれだけが手取りになるのかも一目で比較できます。
                 </p>
 
-                <div className="flex flex-wrap items-center gap-2 text-sm">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 border text-emerald-800">
-                    介護保険料や扶養控除の変化をざっくり反映
-                  </span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 border text-amber-800">
-                    所得税・住民税・社会保険の簡易モデル
-                  </span>
+                <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
+                  <div className="flex flex-wrap items-center gap-2 text-sm">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 border text-emerald-800">
+                      介護保険料や扶養控除の変化をざっくり反映
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 border text-amber-800">
+                      所得税・住民税・社会保険の簡易モデル
+                    </span>
+                  </div>
+
+                  {/* Desktop Share Buttons */}
+                  <div className="hidden md:block">
+                    <ShareButtons
+                      result1995={result1995}
+                      result2025={result2025}
+                      variant="hero"
+                      className="scale-90 origin-right"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -176,15 +188,17 @@ function TedoriTimeMachine() {
         </section>
 
         {/* Share Section */}
-        <section className="max-w-md mx-auto pt-4">
-          <ShareOnXButton
-            currentUrl={currentUrl}
+        <section className="max-w-md mx-auto pt-8 text-center space-y-4">
+          <div className="space-y-1">
+            <h2 className="text-lg font-bold text-slate-800">手取りタイムマシンをシェア</h2>
+            <p className="text-sm text-muted-foreground">
+              面白い／役に立つと思ったら、ぜひSNSで紹介してください👐
+            </p>
+          </div>
+          <ShareButtons
             result1995={result1995}
             result2025={result2025}
           />
-          <p className="mt-2 text-xs text-muted-foreground text-center">
-            共有すると現在の入力条件がURLに含まれます。公開したくない情報は入力しないでください。
-          </p>
         </section>
 
         {/* About Tool */}

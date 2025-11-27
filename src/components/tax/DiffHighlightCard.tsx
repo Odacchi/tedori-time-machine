@@ -97,12 +97,29 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
     const hasAnyChange = barData.some((item) => item.value !== 0);
 
     // Share text generation
-    let shareText = "";
-    if (isDown) {
-        shareText = `手取りタイムマシンでシミュレーションしたら、${selectedComparison.label}と比べて手取りが年間${(absDiff / 10000).toLocaleString()}万円（額面ベースで約${Math.abs(Math.round(selectedComparison.percentDownOnGross))}% Down、会社の人件費ベースでは約${Math.abs(Math.round(selectedComparison.percentDownOnLaborCost))}% Down）になっていました…。\n#手取りタイムマシン #社会保険料`;
-    } else {
-        shareText = `条件によっては${selectedComparison.label}より手取りが増えるケースも？年間${(absDiff / 10000).toLocaleString()}万円（額面ベースで約${Math.abs(Math.round(selectedComparison.percentDownOnGross))}% Up、会社の人件費ベースでは約${Math.abs(Math.round(selectedComparison.percentDownOnLaborCost))}% Up）という結果に。\n#手取りタイムマシン #社会保険料`;
-    }
+    const gross = input ? Math.round(input.annualSalary / 10000).toLocaleString() : "0";
+    const targetYear = selectedComparison.baseYear;
+
+    // Calculation for "If I was in past..."
+    // Compare Past (Base) vs Current (2025)
+    // diffVal = Past - Current
+    const targetTakeHome = selectedComparison.baseNetIncome;
+    const currentTakeHome = selectedComparison.currentNetIncome;
+    const diffVal = targetTakeHome - currentTakeHome;
+    const diffAbsVal = Math.abs(diffVal);
+    const upDown = diffVal >= 0 ? "増" : "減";
+
+    // Rate: (Past - Current) / Current
+    // If Current is 0, avoid NaN (though unlikely for valid input)
+    const diffRateVal = currentTakeHome > 0 ? (Math.abs(diffVal) / currentTakeHome) * 100 : 0;
+
+    const currentTakeHomeStr = Math.round(currentTakeHome / 10000).toLocaleString();
+    const targetTakeHomeStr = Math.round(targetTakeHome / 10000).toLocaleString();
+    const diffAbsStr = Math.round(diffAbsVal / 10000).toLocaleString();
+    const diffRateStr = Math.round(diffRateVal).toLocaleString();
+
+    const shareText = `年収${gross}万円（手取り${currentTakeHomeStr}万円）の人が${targetYear}年にいたら、手取りはいくら？\n「手取りタイムマシン」で計算すると、手取り${targetTakeHomeStr}万円（今より約${diffAbsStr}万円・${diffRateStr}%${upDown}）でした。`;
+
     const shareUrl = currentUrl ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(currentUrl)}` : "#";
 
     const handleDownloadImage = useCallback(async () => {
@@ -332,41 +349,41 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
                                                     contentStyle={{ borderRadius: '8px', fontSize: '12px' }}
                                                     cursor={{ fill: 'transparent' }}
                                                 />
-                                            <ReferenceLine x={0} stroke="#9ca3af" />
-                                            <Bar
-                                                dataKey="value"
-                                                radius={[0, 4, 4, 0]}
-                                                barSize={20}
-                                                isAnimationActive={!isCapturing}
-                                                animationDuration={0}
-                                            >
-                                                <LabelList
+                                                <ReferenceLine x={0} stroke="#9ca3af" />
+                                                <Bar
                                                     dataKey="value"
-                                                    content={({ x = 0, y = 0, width = 0, height = 0, value }) => {
-                                                        if (value == null || typeof value !== "number") return null;
-                                                        const label = `${(value / 10000).toFixed(1)}万`;
-                                                        const xNum = typeof x === "number" ? x : Number(x);
-                                                        const widthNum = typeof width === "number" ? width : Number(width);
-                                                        const yNum = typeof y === "number" ? y : Number(y);
-                                                        const heightNum = typeof height === "number" ? height : Number(height);
-                                                        return (
-                                                            <text
-                                                                x={(Number.isNaN(xNum) ? 0 : xNum) + (Number.isNaN(widthNum) ? 0 : widthNum) + 8}
-                                                                y={(Number.isNaN(yNum) ? 0 : yNum) + (Number.isNaN(heightNum) ? 0 : heightNum / 2)}
-                                                                fill="#475569"
-                                                                fontSize={10}
-                                                                fontWeight={500}
-                                                                dominantBaseline="middle"
-                                                            >
-                                                                {label}
-                                                            </text>
-                                                        );
-                                                    }}
-                                                />
-                                                {barData.map((entry) => (
-                                                    <Cell key={entry.name} fill={entry.fill} />
-                                                ))}
-                                            </Bar>
+                                                    radius={[0, 4, 4, 0]}
+                                                    barSize={20}
+                                                    isAnimationActive={!isCapturing}
+                                                    animationDuration={0}
+                                                >
+                                                    <LabelList
+                                                        dataKey="value"
+                                                        content={({ x = 0, y = 0, width = 0, height = 0, value }) => {
+                                                            if (value == null || typeof value !== "number") return null;
+                                                            const label = `${(value / 10000).toFixed(1)}万`;
+                                                            const xNum = typeof x === "number" ? x : Number(x);
+                                                            const widthNum = typeof width === "number" ? width : Number(width);
+                                                            const yNum = typeof y === "number" ? y : Number(y);
+                                                            const heightNum = typeof height === "number" ? height : Number(height);
+                                                            return (
+                                                                <text
+                                                                    x={(Number.isNaN(xNum) ? 0 : xNum) + (Number.isNaN(widthNum) ? 0 : widthNum) + 8}
+                                                                    y={(Number.isNaN(yNum) ? 0 : yNum) + (Number.isNaN(heightNum) ? 0 : heightNum / 2)}
+                                                                    fill="#475569"
+                                                                    fontSize={10}
+                                                                    fontWeight={500}
+                                                                    dominantBaseline="middle"
+                                                                >
+                                                                    {label}
+                                                                </text>
+                                                            );
+                                                        }}
+                                                    />
+                                                    {barData.map((entry) => (
+                                                        <Cell key={entry.name} fill={entry.fill} />
+                                                    ))}
+                                                </Bar>
                                             </BarChart>
                                         </ResponsiveContainer>
                                     </div>
