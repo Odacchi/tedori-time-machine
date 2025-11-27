@@ -47,7 +47,7 @@ export function NetRateComparisonChart({ rates1995, rates2010, rates2025 }: Prop
                     <BarChart
                         data={data}
                         layout="vertical"
-                        margin={{ top: 16, right: 12, left: 14, bottom: 12 }}
+                        margin={{ top: 16, right: 36, left: 20, bottom: 12 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                         <XAxis type="number" unit="%" domain={[0, 100]} />

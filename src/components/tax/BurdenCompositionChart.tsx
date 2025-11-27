@@ -44,7 +44,7 @@ export function BurdenCompositionChart({ data1995, data2010, data2025 }: Props) 
                     <BarChart
                         data={data}
                         layout="vertical"
-                        margin={{ top: 16, right: 12, left: 16, bottom: 12 }}
+                        margin={{ top: 16, right: 20, left: 20, bottom: 12 }}
                         stackOffset="sign"
                     >
                         <CartesianGrid strokeDasharray="3 3" horizontal={false} />
