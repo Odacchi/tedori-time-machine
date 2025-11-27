@@ -332,17 +332,36 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
                                                     contentStyle={{ borderRadius: '8px', fontSize: '12px' }}
                                                     cursor={{ fill: 'transparent' }}
                                                 />
-                                                <ReferenceLine x={0} stroke="#9ca3af" />
+                                            <ReferenceLine x={0} stroke="#9ca3af" />
                                             <Bar
                                                 dataKey="value"
                                                 radius={[0, 4, 4, 0]}
                                                 barSize={20}
+                                                isAnimationActive={!isCapturing}
+                                                animationDuration={0}
                                             >
                                                 <LabelList
                                                     dataKey="value"
-                                                    position="right"
-                                                    formatter={(value: number) => `${(value / 10000).toFixed(1)}万`}
-                                                    className="text-[10px] fill-slate-700"
+                                                    content={({ x = 0, y = 0, width = 0, height = 0, value }) => {
+                                                        if (value == null || typeof value !== "number") return null;
+                                                        const label = `${(value / 10000).toFixed(1)}万`;
+                                                        const xNum = typeof x === "number" ? x : Number(x);
+                                                        const widthNum = typeof width === "number" ? width : Number(width);
+                                                        const yNum = typeof y === "number" ? y : Number(y);
+                                                        const heightNum = typeof height === "number" ? height : Number(height);
+                                                        return (
+                                                            <text
+                                                                x={(Number.isNaN(xNum) ? 0 : xNum) + (Number.isNaN(widthNum) ? 0 : widthNum) + 8}
+                                                                y={(Number.isNaN(yNum) ? 0 : yNum) + (Number.isNaN(heightNum) ? 0 : heightNum / 2)}
+                                                                fill="#475569"
+                                                                fontSize={10}
+                                                                fontWeight={500}
+                                                                dominantBaseline="middle"
+                                                            >
+                                                                {label}
+                                                            </text>
+                                                        );
+                                                    }}
                                                 />
                                                 {barData.map((entry) => (
                                                     <Cell key={entry.name} fill={entry.fill} />

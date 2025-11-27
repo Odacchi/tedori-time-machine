@@ -9,6 +9,7 @@ import {
     Tooltip,
     ResponsiveContainer,
     Cell,
+    LabelList,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -61,6 +62,16 @@ export function NetIncomeComparisonChart({ netIncome1995, netIncome2010, netInco
                             cursor={{ fill: "transparent" }}
                         />
                         <Bar dataKey="value" name="手取り" radius={[4, 4, 0, 0]}>
+                            <LabelList
+                                dataKey="value"
+                                position="top"
+                                formatter={(value: unknown) => {
+                                    const num = typeof value === "number" ? value : Number(value);
+                                    if (Number.isNaN(num)) return "";
+                                    return `${(num / 10000).toFixed(1)}万`;
+                                }}
+                                className="text-[11px] fill-slate-700 font-semibold"
+                            />
                             {data.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}

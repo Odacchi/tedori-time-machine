@@ -9,6 +9,7 @@ import {
     Tooltip,
     ResponsiveContainer,
     Legend,
+    LabelList,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -61,8 +62,30 @@ export function NetRateComparisonChart({ rates1995, rates2010, rates2025 }: Prop
                             cursor={{ fill: "transparent" }}
                         />
                         <Legend />
-                        <Bar dataKey="gross" name="手取り / 額面" fill="#8aa3f5" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="labor" name="手取り / 人件費" fill="#7dc6a1" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="gross" name="手取り / 額面" fill="#8aa3f5" radius={[4, 4, 0, 0]}>
+                            <LabelList
+                                dataKey="gross"
+                                position="top"
+                                formatter={(value: unknown) => {
+                                    const num = typeof value === "number" ? value : Number(value);
+                                    if (Number.isNaN(num)) return "";
+                                    return `${num.toFixed(1)}%`;
+                                }}
+                                className="text-[11px] fill-slate-700 font-semibold"
+                            />
+                        </Bar>
+                        <Bar dataKey="labor" name="手取り / 人件費" fill="#7dc6a1" radius={[4, 4, 0, 0]}>
+                            <LabelList
+                                dataKey="labor"
+                                position="top"
+                                formatter={(value: unknown) => {
+                                    const num = typeof value === "number" ? value : Number(value);
+                                    if (Number.isNaN(num)) return "";
+                                    return `${num.toFixed(1)}%`;
+                                }}
+                                className="text-[11px] fill-slate-700 font-semibold"
+                            />
+                        </Bar>
                     </BarChart>
                 </ResponsiveContainer>
             </CardContent>

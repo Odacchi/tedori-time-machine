@@ -9,6 +9,7 @@ import {
     Tooltip,
     ResponsiveContainer,
     Legend,
+    LabelList,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -62,9 +63,42 @@ export function BurdenCompositionChart({ data1995, data2010, data2025 }: Props) 
                             cursor={{ fill: "transparent" }}
                         />
                         <Legend />
-                        <Bar dataKey="incomeTax" name="所得税" stackId="a" fill="#8aa3f5" />
-                        <Bar dataKey="residentTax" name="住民税" stackId="a" fill="#7dc6a1" />
-                        <Bar dataKey="social" name="社会保険料" stackId="a" fill="#e58c8c" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="incomeTax" name="所得税" stackId="a" fill="#8aa3f5">
+                            <LabelList
+                                dataKey="incomeTax"
+                                position="top"
+                                formatter={(value: unknown) => {
+                                    const num = typeof value === "number" ? value : Number(value);
+                                    if (Number.isNaN(num)) return "";
+                                    return `${(num / 10000).toFixed(1)}万`;
+                                }}
+                                className="text-[11px] fill-slate-700 font-semibold"
+                            />
+                        </Bar>
+                        <Bar dataKey="residentTax" name="住民税" stackId="a" fill="#7dc6a1">
+                            <LabelList
+                                dataKey="residentTax"
+                                position="top"
+                                formatter={(value: unknown) => {
+                                    const num = typeof value === "number" ? value : Number(value);
+                                    if (Number.isNaN(num)) return "";
+                                    return `${(num / 10000).toFixed(1)}万`;
+                                }}
+                                className="text-[11px] fill-slate-700 font-semibold"
+                            />
+                        </Bar>
+                        <Bar dataKey="social" name="社会保険料" stackId="a" fill="#e58c8c" radius={[4, 4, 0, 0]}>
+                            <LabelList
+                                dataKey="social"
+                                position="top"
+                                formatter={(value: unknown) => {
+                                    const num = typeof value === "number" ? value : Number(value);
+                                    if (Number.isNaN(num)) return "";
+                                    return `${(num / 10000).toFixed(1)}万`;
+                                }}
+                                className="text-[11px] fill-slate-700 font-semibold"
+                            />
+                        </Bar>
                     </BarChart>
                 </ResponsiveContainer>
             </CardContent>
