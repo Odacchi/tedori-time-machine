@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis, LabelList } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { XIcon } from "@/components/tax/XIcon";
@@ -333,15 +333,21 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
                                                     cursor={{ fill: 'transparent' }}
                                                 />
                                                 <ReferenceLine x={0} stroke="#9ca3af" />
-                                                <Bar
+                                            <Bar
+                                                dataKey="value"
+                                                radius={[0, 4, 4, 0]}
+                                                barSize={20}
+                                            >
+                                                <LabelList
                                                     dataKey="value"
-                                                    radius={[0, 4, 4, 0]}
-                                                    barSize={20}
-                                                >
-                                                    {barData.map((entry) => (
-                                                        <Cell key={entry.name} fill={entry.fill} />
-                                                    ))}
-                                                </Bar>
+                                                    position="right"
+                                                    formatter={(value: number) => `${(value / 10000).toFixed(1)}万`}
+                                                    className="text-[10px] fill-slate-700"
+                                                />
+                                                {barData.map((entry) => (
+                                                    <Cell key={entry.name} fill={entry.fill} />
+                                                ))}
+                                            </Bar>
                                             </BarChart>
                                         </ResponsiveContainer>
                                     </div>
