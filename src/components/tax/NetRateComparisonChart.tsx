@@ -46,7 +46,7 @@ export function NetRateComparisonChart({ rates1995, rates2010, rates2025 }: Prop
                     手取り率の変化
                 </CardTitle>
                 <p className="text-xs text-muted-foreground">
-                    「額面」と「会社の人件費」のうち、どれだけが手取りになるか
+                    「額面」と「会社があなたのために支払うお金」に対して、それぞれどれだけが手取りになるかの比較
                 </p>
             </CardHeader>
             <CardContent>

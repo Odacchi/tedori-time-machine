@@ -59,7 +59,7 @@ export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
                     人件費内訳の変化
                 </CardTitle>
                 <p className="text-xs text-muted-foreground">
-                    手取り + 税・社保（本人・会社負担）
+                    会社があなたのために支払うお金の中で、手取り・税金・社会保険料（本人＋会社負担）がどのくらいの割合かを比較
                 </p>
             </CardHeader>
             <CardContent>
@@ -96,7 +96,7 @@ export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
                                         residentTax: "住民税",
                                         employeeSocial: "社会保険料（本人）",
                                         employerSocial: "社会保険料（会社）",
-                                        total: "総人件費",
+                                        total: "人件費",
                                     };
                                     return [`${value.toLocaleString()}円`, labels[label] ?? key];
                                 }}
@@ -154,7 +154,7 @@ export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
                                                 formatter={(value: unknown) => {
                                                     const num = typeof value === "number" ? value : Number(value);
                                                     if (Number.isNaN(num)) return "";
-                                                    return `総人件費\n${totalFormatter(num)}`;
+                                                    return `人件費\n${totalFormatter(num)}`;
                                                 }}
                                                 className="text-[11px] fill-slate-700 font-semibold"
                                             />

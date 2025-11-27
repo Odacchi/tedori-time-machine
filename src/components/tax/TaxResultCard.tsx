@@ -78,7 +78,7 @@ export function TaxResultCard({ result, title }: Props) {
                                 <span>{breakdown.employerSocialInsurance.toLocaleString()}円</span>
                             </div>
                             <div className="flex justify-between py-1 text-muted-foreground">
-                                <span>会社の人件費総額</span>
+                                <span>人件費総額</span>
                                 <span>{breakdown.totalLaborCost.toLocaleString()}円</span>
                             </div>
 
