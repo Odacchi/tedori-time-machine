@@ -8,7 +8,6 @@ import {
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-    Legend,
     LabelList,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -44,57 +43,56 @@ export function BurdenCompositionChart({ data1995, data2010, data2025 }: Props) 
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         data={data}
-                        margin={{
-                            top: 20,
-                            right: 30,
-                            left: 20,
-                            bottom: 5,
-                        }}
+                        layout="vertical"
+                        margin={{ top: 16, right: 12, left: 16, bottom: 12 }}
                         stackOffset="sign"
                     >
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="name" />
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                        <XAxis
+                            type="number"
+                            tickFormatter={(value) => `${(value / 10000).toFixed(0)}万`}
+                        />
                         <YAxis
-                            tickFormatter={(value) => `${value / 10000}万`}
-                            width={60}
+                            type="category"
+                            dataKey="name"
+                            width={88}
                         />
                         <Tooltip
                             formatter={(value: number) => [`${value.toLocaleString()}円`, ""]}
                             cursor={{ fill: "transparent" }}
                         />
-                        <Legend />
-                        <Bar dataKey="incomeTax" name="所得税" stackId="a" fill="#8aa3f5">
+                        <Bar dataKey="incomeTax" name="所得税" stackId="a" fill="#8aa3f5" radius={[0, 0, 0, 0]}>
                             <LabelList
                                 dataKey="incomeTax"
-                                position="top"
+                                position="right"
                                 formatter={(value: unknown) => {
                                     const num = typeof value === "number" ? value : Number(value);
                                     if (Number.isNaN(num)) return "";
-                                    return `${(num / 10000).toFixed(1)}万`;
+                                    return `所得税 ${(num / 10000).toFixed(1)}万`;
                                 }}
                                 className="text-[11px] fill-slate-700 font-semibold"
                             />
                         </Bar>
-                        <Bar dataKey="residentTax" name="住民税" stackId="a" fill="#7dc6a1">
+                        <Bar dataKey="residentTax" name="住民税" stackId="a" fill="#7dc6a1" radius={[0, 0, 0, 0]}>
                             <LabelList
                                 dataKey="residentTax"
-                                position="top"
+                                position="right"
                                 formatter={(value: unknown) => {
                                     const num = typeof value === "number" ? value : Number(value);
                                     if (Number.isNaN(num)) return "";
-                                    return `${(num / 10000).toFixed(1)}万`;
+                                    return `住民税 ${(num / 10000).toFixed(1)}万`;
                                 }}
                                 className="text-[11px] fill-slate-700 font-semibold"
                             />
                         </Bar>
-                        <Bar dataKey="social" name="社会保険料" stackId="a" fill="#e58c8c" radius={[4, 4, 0, 0]}>
+                        <Bar dataKey="social" name="社会保険料" stackId="a" fill="#e58c8c" radius={[0, 4, 4, 0]}>
                             <LabelList
                                 dataKey="social"
-                                position="top"
+                                position="right"
                                 formatter={(value: unknown) => {
                                     const num = typeof value === "number" ? value : Number(value);
                                     if (Number.isNaN(num)) return "";
-                                    return `${(num / 10000).toFixed(1)}万`;
+                                    return `社会保険料 ${(num / 10000).toFixed(1)}万`;
                                 }}
                                 className="text-[11px] fill-slate-700 font-semibold"
                             />

@@ -44,27 +44,27 @@ export function NetIncomeComparisonChart({ netIncome1995, netIncome2010, netInco
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         data={data}
-                        margin={{
-                            top: 20,
-                            right: 30,
-                            left: 20,
-                            bottom: 5,
-                        }}
+                        layout="vertical"
+                        margin={{ top: 16, right: 12, left: 16, bottom: 12 }}
                     >
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="name" />
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                        <XAxis
+                            type="number"
+                            tickFormatter={(value) => `${(value / 10000).toFixed(0)}万`}
+                        />
                         <YAxis
-                            tickFormatter={(value) => `${value / 10000}万`}
-                            width={60}
+                            type="category"
+                            dataKey="name"
+                            width={80}
                         />
                         <Tooltip
                             formatter={(value: number) => [`${value.toLocaleString()}円`, "手取り"]}
                             cursor={{ fill: "transparent" }}
                         />
-                        <Bar dataKey="value" name="手取り" radius={[4, 4, 0, 0]}>
+                        <Bar dataKey="value" name="手取り" radius={[0, 4, 4, 0]}>
                             <LabelList
                                 dataKey="value"
-                                position="top"
+                                position="right"
                                 formatter={(value: unknown) => {
                                     const num = typeof value === "number" ? value : Number(value);
                                     if (Number.isNaN(num)) return "";

@@ -147,26 +147,30 @@ function TedoriTimeMachine() {
         {/* Charts Section */}
         <section className="space-y-8">
           <GraphTabs
-            netIncome1995={result1995.breakdown.netIncome}
-            netIncome2010={result2010.breakdown.netIncome}
-            netIncome2025={result2025.breakdown.netIncome}
+            input={input}
             rates1995={{ gross: result1995.breakdown.netRateOnGross, labor: result1995.breakdown.netRateOnLaborCost }}
             rates2010={{ gross: result2010.breakdown.netRateOnGross, labor: result2010.breakdown.netRateOnLaborCost }}
             rates2025={{ gross: result2025.breakdown.netRateOnGross, labor: result2025.breakdown.netRateOnLaborCost }}
-            burden1995={{
+            laborCost1995={{
+              net: result1995.breakdown.netIncome,
               incomeTax: result1995.breakdown.incomeTax,
               residentTax: result1995.breakdown.residentTax,
-              social: result1995.breakdown.employeeSocialInsurance
+              employeeSocial: result1995.breakdown.employeeSocialInsurance,
+              employerSocial: result1995.breakdown.employerSocialInsurance,
             }}
-            burden2010={{
+            laborCost2010={{
+              net: result2010.breakdown.netIncome,
               incomeTax: result2010.breakdown.incomeTax,
               residentTax: result2010.breakdown.residentTax,
-              social: result2010.breakdown.employeeSocialInsurance
+              employeeSocial: result2010.breakdown.employeeSocialInsurance,
+              employerSocial: result2010.breakdown.employerSocialInsurance,
             }}
-            burden2025={{
+            laborCost2025={{
+              net: result2025.breakdown.netIncome,
               incomeTax: result2025.breakdown.incomeTax,
               residentTax: result2025.breakdown.residentTax,
-              social: result2025.breakdown.employeeSocialInsurance
+              employeeSocial: result2025.breakdown.employeeSocialInsurance,
+              employerSocial: result2025.breakdown.employerSocialInsurance,
             }}
           />
         </section>

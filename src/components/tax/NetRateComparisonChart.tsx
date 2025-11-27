@@ -8,7 +8,6 @@ import {
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-    Legend,
     LabelList,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,41 +46,36 @@ export function NetRateComparisonChart({ rates1995, rates2010, rates2025 }: Prop
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         data={data}
-                        margin={{
-                            top: 20,
-                            right: 30,
-                            left: 20,
-                            bottom: 5,
-                        }}
+                        layout="vertical"
+                        margin={{ top: 16, right: 12, left: 14, bottom: 12 }}
                     >
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="name" />
-                        <YAxis unit="%" domain={[0, 100]} width={40} />
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                        <XAxis type="number" unit="%" domain={[0, 100]} />
+                        <YAxis type="category" dataKey="name" width={88} />
                         <Tooltip
                             formatter={(value: number) => [`${value}%`, ""]}
                             cursor={{ fill: "transparent" }}
                         />
-                        <Legend />
-                        <Bar dataKey="gross" name="手取り / 額面" fill="#8aa3f5" radius={[4, 4, 0, 0]}>
+                        <Bar dataKey="gross" name="手取り / 額面" fill="#8aa3f5" radius={[0, 4, 4, 0]}>
                             <LabelList
                                 dataKey="gross"
-                                position="top"
+                                position="right"
                                 formatter={(value: unknown) => {
                                     const num = typeof value === "number" ? value : Number(value);
                                     if (Number.isNaN(num)) return "";
-                                    return `${num.toFixed(1)}%`;
+                                    return `手取り / 額面 ${num.toFixed(1)}%`;
                                 }}
                                 className="text-[11px] fill-slate-700 font-semibold"
                             />
                         </Bar>
-                        <Bar dataKey="labor" name="手取り / 人件費" fill="#7dc6a1" radius={[4, 4, 0, 0]}>
+                        <Bar dataKey="labor" name="手取り / 人件費" fill="#7dc6a1" radius={[0, 4, 4, 0]}>
                             <LabelList
                                 dataKey="labor"
-                                position="top"
+                                position="right"
                                 formatter={(value: unknown) => {
                                     const num = typeof value === "number" ? value : Number(value);
                                     if (Number.isNaN(num)) return "";
-                                    return `${num.toFixed(1)}%`;
+                                    return `手取り / 人件費 ${num.toFixed(1)}%`;
                                 }}
                                 className="text-[11px] fill-slate-700 font-semibold"
                             />
