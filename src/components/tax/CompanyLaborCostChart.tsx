@@ -38,9 +38,9 @@ export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
     ] as const;
 
     const data = [
-        { name: "1995年頃", ...data1995 },
-        { name: "2010年頃", ...data2010 },
-        { name: "現在 (2025)", ...data2025 },
+        { name: "1995年", ...data1995 },
+        { name: "2010年", ...data2010 },
+        { name: "2025年", ...data2025 },
     ];
 
     const withTotal = data.map((item) => ({
@@ -53,14 +53,14 @@ export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>会社の人件費内訳（手取り + 税・社保）</CardTitle>
+                <CardTitle>人件費内訳（手取り + 税・社保）</CardTitle>
             </CardHeader>
             <CardContent className="h-[320px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         data={withTotal}
                         layout="vertical"
-                        margin={{ top: 16, right: 36, left: 20, bottom: 12 }}
+                        margin={{ top: 16, right: 36, left: 0, bottom: 12 }}
                         stackOffset="none"
                     >
                         <CartesianGrid strokeDasharray="3 3" horizontal={false} />
@@ -87,7 +87,8 @@ export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
                         />
                         {series.map((item, idx) => {
                             const isTop = idx === series.length - 1;
-                            const radius: [number, number, number, number] = isTop ? [4, 4, 0, 0] : [0, 0, 0, 0];
+                            const radius: [number, number, number, number] =
+                                isTop && item.key === "employerSocial" ? [0, 4, 4, 0] : isTop ? [4, 4, 0, 0] : [0, 0, 0, 0];
                             const isNet = item.key === "net";
                             return (
                                 <Bar

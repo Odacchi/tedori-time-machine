@@ -35,7 +35,7 @@ export function GraphTabs({
                 <Tabs defaultValue="rate" className="w-full">
                     <TabsList className="grid w-full grid-cols-2 mb-4">
                         <TabsTrigger value="rate">手取り率</TabsTrigger>
-                        <TabsTrigger value="labor">会社の人件費内訳</TabsTrigger>
+                        <TabsTrigger value="labor">人件費内訳</TabsTrigger>
                     </TabsList>
                     <TrialConditionsSummary input={input} />
 

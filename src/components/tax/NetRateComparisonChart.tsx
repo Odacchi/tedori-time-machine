@@ -21,17 +21,17 @@ type Props = {
 export function NetRateComparisonChart({ rates1995, rates2010, rates2025 }: Props) {
     const data = [
         {
-            name: "1995年頃",
+            name: "1995年",
             gross: Math.round(rates1995.gross * 1000) / 10,
             labor: Math.round(rates1995.labor * 1000) / 10,
         },
         {
-            name: "2010年頃",
+            name: "2010年",
             gross: Math.round(rates2010.gross * 1000) / 10,
             labor: Math.round(rates2010.labor * 1000) / 10,
         },
         {
-            name: "現在 (2025)",
+            name: "2025年",
             gross: Math.round(rates2025.gross * 1000) / 10,
             labor: Math.round(rates2025.labor * 1000) / 10,
         },
@@ -47,7 +47,7 @@ export function NetRateComparisonChart({ rates1995, rates2010, rates2025 }: Prop
                     <BarChart
                         data={data}
                         layout="vertical"
-                        margin={{ top: 16, right: 36, left: 20, bottom: 12 }}
+                        margin={{ top: 16, right: 36, left: 0, bottom: 12 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                         <XAxis type="number" unit="%" domain={[0, 100]} />
