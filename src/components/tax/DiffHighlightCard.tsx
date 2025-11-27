@@ -109,7 +109,9 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
         if (!captureRef.current) return;
         setIsSaving(true);
         setIsCapturing(true);
+        // Wait for state update to reflect (hide buttons etc)
         await new Promise((resolve) => requestAnimationFrame(() => resolve(undefined)));
+
         try {
             const dataUrl = await toPng(captureRef.current, {
                 cacheBust: true,
@@ -120,9 +122,36 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
                     return node.dataset.ignoreCapture !== "true";
                 },
             });
-            const link = document.createElement("a");
+
             const suffix = selectedComparison.baseYear === "1995" ? "vs-1995" : "vs-2010";
-            link.download = `tedori-highlight-${suffix}.png`;
+            const fileName = `tedori-highlight-${suffix}.png`;
+
+            // Detect mobile device
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+            // Try Web Share API only on mobile
+            if (isMobile && navigator.share) {
+                try {
+                    const blob = await (await fetch(dataUrl)).blob();
+                    const file = new File([blob], fileName, { type: "image/png" });
+
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: '手取りタイムマシン',
+                            text: shareText
+                        });
+                        return; // Success, exit
+                    }
+                } catch (shareError) {
+                    // Share failed or cancelled, fall back to download
+                    console.log("Web Share API failed, falling back to download", shareError);
+                }
+            }
+
+            // Fallback: Download link (Desktop or non-share browsers)
+            const link = document.createElement("a");
+            link.download = fileName;
             link.href = dataUrl;
             link.click();
         } catch (error) {
@@ -131,7 +160,7 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
             setIsSaving(false);
             setIsCapturing(false);
         }
-    }, [selectedComparison.baseYear]);
+    }, [selectedComparison.baseYear, shareText]);
 
     // Helper to render family icons
     const renderFamilyIcons = () => {
