@@ -84,9 +84,12 @@ export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
                                 width={60}
                                 tick={{ fontSize: 12 }}
                                 tickLine={false}
-                                axisLine={false}
-                            />
-                            <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                            axisLine={false}
+                        />
+                        <Legend
+                            itemSorter={null}
+                            wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }}
+                        />
                             <Tooltip
                                 formatter={(value: number, key) => {
                                     const label = key as keyof LaborCostData;
