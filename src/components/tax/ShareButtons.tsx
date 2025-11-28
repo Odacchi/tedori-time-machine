@@ -68,7 +68,13 @@ export function ShareButtons({ result1995, result2025, variant = "footer", class
             )}>
                 {/* X (Twitter) */}
                 <Button asChild className={cn("bg-black hover:bg-gray-800 text-white rounded-xl shadow-sm hover:shadow-md transition-all", isHero ? "h-10 px-4" : "h-12 flex-1")} size={isHero ? "sm" : "lg"}>
-                    <a href={xShareUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                    <a
+                        href={xShareUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 text-white"
+                        style={{ color: "#fff" }}
+                    >
                         <XIcon className={cn(isHero ? "w-4 h-4" : "w-5 h-5")} />
                         <span className="font-bold">Post</span>
                     </a>
@@ -76,7 +82,13 @@ export function ShareButtons({ result1995, result2025, variant = "footer", class
 
                 {/* Facebook */}
                 <Button asChild className={cn("bg-[#1877F2] hover:bg-[#166fe5] text-white rounded-xl shadow-sm hover:shadow-md transition-all", isHero ? "h-10 px-4" : "h-12 flex-1")} size={isHero ? "sm" : "lg"}>
-                    <a href={fbShareUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                    <a
+                        href={fbShareUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 text-white"
+                        style={{ color: "#fff" }}
+                    >
                         <FacebookIcon className={cn(isHero ? "w-5 h-5" : "w-6 h-6")} />
                         <span className="font-bold">Share</span>
                     </a>
@@ -84,7 +96,13 @@ export function ShareButtons({ result1995, result2025, variant = "footer", class
 
                 {/* LINE */}
                 <Button asChild className={cn("bg-[#06C755] hover:bg-[#05b34c] text-white rounded-xl shadow-sm hover:shadow-md transition-all", isHero ? "h-10 px-4" : "h-12 flex-1")} size={isHero ? "sm" : "lg"}>
-                    <a href={lineShareUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                    <a
+                        href={lineShareUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 text-white"
+                        style={{ color: "#fff" }}
+                    >
                         <LineIcon className={cn(isHero ? "w-5 h-5" : "w-6 h-6")} />
                         <span className="font-bold">LINE</span>
                     </a>
