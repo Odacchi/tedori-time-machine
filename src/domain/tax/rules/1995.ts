@@ -4,15 +4,19 @@ import { TaxRuleSet } from "../model";
 export const rules1995: TaxRuleSet = {
     basicDeduction: 380000,
     spouseDeduction: 380000,
+    spouseDeductionIncomeLimit: Number.POSITIVE_INFINITY,
     childDeductions: {
         under16: 380000, // Generous deductions
         age16to18: 530000, // Specific dependent
         age19to23: 530000, // Specific dependent
     },
-    socialInsuranceRate: 0.115, // Approx 11.5% - significantly lower
-    employerSocialRate: 0.115, // Assume equal split
-    longTermCareRate: 0, // No LTC yet
-    hasLongTermCare: false,
+    socialInsurance: {
+        pension: { employee: 0.07, employer: 0.07 },
+        health: { employee: 0.035, employer: 0.035 },
+        unemployment: { employee: 0.01, employer: 0.01 },
+        longTermCare: { employee: 0, employer: 0 }, // No LTC yet
+        workersComp: { employee: 0, employer: 0 },
+    },
     residentTaxRate: 0.10, // Simplified
     salaryIncomeDeductionTable: {
         brackets: [

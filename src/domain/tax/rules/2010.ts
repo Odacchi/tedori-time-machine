@@ -4,15 +4,19 @@ import { TaxRuleSet } from "../model";
 export const rules2010: TaxRuleSet = {
     basicDeduction: 380000,
     spouseDeduction: 380000,
+    spouseDeductionIncomeLimit: Number.POSITIVE_INFINITY,
     childDeductions: {
         under16: 380000, // 年少扶養控除あり
         age16to18: 630000, // 特定扶養親族 (16-22 was wider then, simplified to 16-18 high deduction)
         age19to23: 630000, // 特定扶養親族
     },
-    socialInsuranceRate: 0.135, // Approx 13.5%
-    employerSocialRate: 0.135, // Assume equal split
-    longTermCareRate: 0.012, // Approx 1.2% (started 2000)
-    hasLongTermCare: true,
+    socialInsurance: {
+        pension: { employee: 0.08, employer: 0.08 },
+        health: { employee: 0.04, employer: 0.04 },
+        unemployment: { employee: 0.015, employer: 0.015 },
+        longTermCare: { employee: 0.012, employer: 0.012 },
+        workersComp: { employee: 0, employer: 0 },
+    },
     residentTaxRate: 0.10,
     salaryIncomeDeductionTable: {
         brackets: [

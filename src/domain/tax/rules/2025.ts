@@ -10,10 +10,13 @@ export const rules2025: TaxRuleSet = {
         age16to18: 380000, // General dependent (16-18 is now general, 19-22 is specific)
         age19to23: 630000, // Specific dependent (19-22)
     },
-    socialInsuranceRate: 0.155, // Approx 15.5%
-    employerSocialRate: 0.155, // Assume equal split
-    longTermCareRate: 0.017, // Approx 1.7% (rising)
-    hasLongTermCare: true,
+    socialInsurance: {
+        pension: { employee: 0.085, employer: 0.085 },
+        health: { employee: 0.05, employer: 0.05 },
+        unemployment: { employee: 0.02, employer: 0.02 },
+        longTermCare: { employee: 0.017, employer: 0.017 },
+        workersComp: { employee: 0, employer: 0 },
+    },
     residentTaxRate: 0.10,
     salaryIncomeDeductionTable: {
         brackets: [
