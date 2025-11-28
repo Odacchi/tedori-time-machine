@@ -11,20 +11,20 @@ export const rules1995: TaxRuleSet = {
         age19to23: 530000, // Specific dependent
     },
     socialInsurance: {
-        // 厚生年金 ≒14.5%
+        // 厚生年金 ≒13.5%
         pension: { 
-            employee: 0.0725,
-            employer: 0.0725 
+            employee: 0.0675,
+            employer: 0.0675,
         },  
         // 政管健保≒協会けんぽ相当 ≒8.2%    
         health: { 
             employee: 0.041, 
-            employer: 0.041 
+            employer: 0.041, 
         }, 
         // 雇用保険：会社の方が高い想定
         unemployment: { 
             employee: 0.005, 
-            employer: 0.008 
+            employer: 0.008,
         },
         // 介護保険なし
         longTermCare: { 
