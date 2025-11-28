@@ -54,18 +54,25 @@ export function calculateForPreset(input: TaxInput, preset: TaxYearPreset): TaxR
 
     const { annualSalary } = input;
 
-    // 1. Social Insurance
-    let employeeSocialRate = rules.socialInsuranceRate;
-    if (rules.hasLongTermCare && input.isOver40) {
-        employeeSocialRate += rules.longTermCareRate;
-    }
-    const employeeSocialInsurance = annualSalary * employeeSocialRate;
+    // 1. Social Insurance (sum of each scheme; LTC applies only if 40+)
+    const baseEmployeeSocialRate =
+        rules.socialInsurance.pension.employee +
+        rules.socialInsurance.health.employee +
+        rules.socialInsurance.unemployment.employee;
 
-    // Employer share (simplified: base + LTC if applicable)
-    let employerSocialRate = rules.employerSocialRate;
-    if (rules.hasLongTermCare && input.isOver40) {
-        employerSocialRate += rules.longTermCareRate; // Assume employer matches LTC
-    }
+    const baseEmployerSocialRate =
+        rules.socialInsurance.pension.employer +
+        rules.socialInsurance.health.employer +
+        rules.socialInsurance.unemployment.employer +
+        rules.socialInsurance.workersComp.employer;
+
+    const includeLTC = input.isOver40;
+    const employeeSocialRate =
+        baseEmployeeSocialRate + (includeLTC ? rules.socialInsurance.longTermCare.employee : 0);
+    const employerSocialRate =
+        baseEmployerSocialRate + (includeLTC ? rules.socialInsurance.longTermCare.employer : 0);
+
+    const employeeSocialInsurance = annualSalary * employeeSocialRate;
     const employerSocialInsurance = annualSalary * employerSocialRate;
 
     // 2. Salary Income
@@ -77,10 +84,7 @@ export function calculateForPreset(input: TaxInput, preset: TaxYearPreset): TaxR
     let totalDeductions = rules.basicDeduction + employeeSocialInsurance;
 
     const isSpouseDeductible =
-        input.spouse === "dependent" &&
-        (rules.spouseDeductionIncomeLimit === undefined
-            ? true
-            : salaryIncome <= rules.spouseDeductionIncomeLimit);
+        input.spouse === "dependent" && salaryIncome <= rules.spouseDeductionIncomeLimit;
 
     if (isSpouseDeductible) {
         totalDeductions += rules.spouseDeduction;

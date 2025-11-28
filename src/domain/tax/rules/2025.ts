@@ -10,10 +10,33 @@ export const rules2025: TaxRuleSet = {
         age16to18: 380000, // General dependent (16-18 is now general, 19-22 is specific)
         age19to23: 630000, // Specific dependent (19-22)
     },
-    socialInsuranceRate: 0.155, // Approx 15.5%
-    employerSocialRate: 0.155, // Assume equal split
-    longTermCareRate: 0.017, // Approx 1.7% (rising)
-    hasLongTermCare: true,
+    socialInsurance: {
+        // 厚生年金：総率 18.3% を折半イメージ
+        pension: {
+            employee: 0.0915,
+            employer: 0.0915,
+        },
+        // 健康保険：協会けんぽ（東京 or 平均）をイメージして総率 ≒9.7%〜10%
+        health: {
+            employee: 0.05,
+            employer: 0.05,
+        },
+        // 雇用保険：本人 ≒0.6%、会社 ≒0.9% くらい
+        unemployment: {
+            employee: 0.006,
+            employer: 0.009,
+        },
+        // 介護保険：合計 ≒2.0% 前後を想定して 1%＋1%
+        longTermCare: {
+            employee: 0.01,
+            employer: 0.01,
+        },
+        // 労災：本人 0、会社だけ平均 0.3% くらいをざっくり
+        workersComp: {
+            employee: 0,
+            employer: 0.003,
+        },
+    },
     residentTaxRate: 0.10,
     salaryIncomeDeductionTable: {
         brackets: [
