@@ -148,7 +148,7 @@ function TedoriTimeMachine() {
                   </p>
 
                   {/* CTA Buttons */}
-                  <div className="pt-2">
+                  <div className="pt-2 hidden sm:block">
                     <ShareButtons
                       result1995={result1995}
                       result2025={result2025}
