@@ -13,8 +13,9 @@ import { TaxInput } from "@/domain/tax/model";
 
 type Props = {
     comparisons: {
-        baseYear: "1995" | "2010";
+        baseYear: "1995" | "2010" | "2040";
         label: string;
+        currentYearLabel?: string;
         baseNetIncome: number;
         currentNetIncome: number;
         baseLaborCost: number;
@@ -36,7 +37,7 @@ type Props = {
 const PIE_COLORS = ["#8aa3f5", "#7dc6a1", "#e58c8c"];
 
 type ComparisonNoteProps = {
-    era: "1995" | "2010";
+    era: "1995" | "2010" | "2040";
 };
 
 const ComparisonNote = ({ era }: ComparisonNoteProps) => {
@@ -47,10 +48,35 @@ const ComparisonNote = ({ era }: ComparisonNoteProps) => {
             </p>
         );
     }
+    if (era === "2010") {
+        return (
+            <p className="text-xs text-muted-foreground leading-relaxed">
+                2010年ごろには介護保険料はすでにありましたが、いまより保険料率は低く、16歳未満の子どもには年少扶養控除も残っていました。2025年ごろでは社会保険料率のさらなる引き上げと年少扶養控除の廃止が重なり、同じ年収でも2010年より手取りが減りやすくなっています。
+            </p>
+        );
+    }
     return (
-        <p className="text-xs text-muted-foreground leading-relaxed">
-            2010年ごろには介護保険料はすでにありましたが、いまより保険料率は低く、16歳未満の子どもには年少扶養控除も残っていました。2025年ごろでは社会保険料率のさらなる引き上げと年少扶養控除の廃止が重なり、同じ年収でも2010年より手取りが減りやすくなっています。
-        </p>
+        <div className="space-y-2">
+            <p className="text-xs text-muted-foreground leading-relaxed">
+                このツールの2040年シナリオは、政府や各種機関が公表している「2040年に社会保障費が約190兆円まで増える」という前提を出発点にしています。
+            </p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+                一方で、政府試算やその他の試算では、「どの税目・どの社会保険料をどの程度引き上げて帳尻を合わせるのか」が意図的にぼかされています。そのままでは、社会保障費190兆円という“支出の現実”と、誰がどれだけ負担するのかという“負担の現実”がつながりません。
+            </p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+                そこでこのツールでは、あえて次のような極端な仮定を置いています：
+            </p>
+            <ul className="list-disc list-inside text-xs text-muted-foreground leading-relaxed pl-1">
+                <li>生産年齢人口は約2割減るが、AI 等の活用により賃金総額は2025年と同程度を維持する</li>
+                <li>社会保障費の増加分（約50兆円）は、すべて社会保険料（年金・健康保険・介護保険）の引き上げによって賄う</li>
+                <li>その結果、年金・健康・介護の保険料率は2025年比で一律約1.6倍になる</li>
+            </ul>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+                これは「こうなる」と約束する予測ではありません。
+                むしろ、「社会保障改革から目を背けて給付水準を維持したまま、増えた社会保障費をすべて社会保険料で負担させたら、
+                現役世代の手取りはどこまで削られるのか？」を可視化するためのシミュレーションです。
+            </p>
+        </div>
     );
 };
 
@@ -69,14 +95,14 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
                         ※本気でシミュレーションしたい方は、まずは働きましょう…？
                     </p>
                     <p className="text-xs text-muted-foreground">
-                        年収（万円）を入力すると、1995/2010/2025の比較が表示されます。
+                        年収（万円）を入力すると、1995/2010/2025/2040の比較が表示されます。
                     </p>
                 </CardContent>
             </Card>
         );
     }
 
-    const [selected, setSelected] = useState<"1995" | "2010">("1995");
+    const [selected, setSelected] = useState<"1995" | "2010" | "2040">("1995");
     const [isSaving, setIsSaving] = useState(false);
     const [isCapturing, setIsCapturing] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
@@ -105,20 +131,39 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
     // diffVal = Past - Current
     const targetTakeHome = selectedComparison.baseNetIncome;
     const currentTakeHome = selectedComparison.currentNetIncome;
-    const diffVal = targetTakeHome - currentTakeHome;
+
+    // For 2040, we want to compare 2040 (currentTakeHome) vs 2025 (targetTakeHome).
+    // If 2040 < 2025, we want "Decrease".
+    // Standard logic: diffVal = Past - Current.
+    // For 2040: diffVal = 2040 - 2025.
+    let diffVal = 0;
+    if (targetYear === "2040") {
+        diffVal = currentTakeHome - targetTakeHome;
+    } else {
+        diffVal = targetTakeHome - currentTakeHome;
+    }
+
     const diffAbsVal = Math.abs(diffVal);
     const upDown = diffVal >= 0 ? "増" : "減";
 
     // Rate: (Past - Current) / Current
     // If Current is 0, avoid NaN (though unlikely for valid input)
-    const diffRateVal = currentTakeHome > 0 ? (Math.abs(diffVal) / currentTakeHome) * 100 : 0;
+    // For 2040: (2040 - 2025) / 2025
+    const denominator = targetYear === "2040" ? targetTakeHome : currentTakeHome;
+    const diffRateVal = denominator > 0 ? (Math.abs(diffVal) / denominator) * 100 : 0;
 
     const currentTakeHomeStr = Math.round(currentTakeHome / 10000).toLocaleString();
     const targetTakeHomeStr = Math.round(targetTakeHome / 10000).toLocaleString();
     const diffAbsStr = Math.round(diffAbsVal / 10000).toLocaleString();
     const diffRateStr = Math.round(diffRateVal).toLocaleString();
 
-    const shareText = `年収${gross}万円（手取り${currentTakeHomeStr}万円）の人が${targetYear}年にいたら、手取りはいくら？\n「手取りタイムマシン」で計算すると、手取り${targetTakeHomeStr}万円（今より約${diffAbsStr}万円・${diffRateStr}%${upDown}）でした。`;
+    // Customize share text for 2040
+    let shareText = "";
+    if (targetYear === "2040") {
+        shareText = `年収${gross}万円（手取り${targetTakeHomeStr}万円）の人が2040年（社保1.6倍シナリオ）になったら、手取りはいくら？\n「手取りタイムマシン」で計算すると、手取り${currentTakeHomeStr}万円（今より約${diffAbsStr}万円・${diffRateStr}%${upDown}）でした。`;
+    } else {
+        shareText = `年収${gross}万円（手取り${currentTakeHomeStr}万円）の人が${targetYear}年にいたら、手取りはいくら？\n「手取りタイムマシン」で計算すると、手取り${targetTakeHomeStr}万円（今より約${diffAbsStr}万円・${diffRateStr}%${upDown}）でした。`;
+    }
 
     const shareUrl = currentUrl ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(currentUrl)}` : "#";
 
@@ -140,7 +185,7 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
                 },
             });
 
-            const suffix = selectedComparison.baseYear === "1995" ? "vs-1995" : "vs-2010";
+            const suffix = selectedComparison.baseYear === "1995" ? "vs-1995" : selectedComparison.baseYear === "2010" ? "vs-2010" : "vs-2040";
             const fileName = `tedori-highlight-${suffix}.png`;
 
             // Detect mobile device
@@ -232,11 +277,12 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
                         </CardTitle>
                         <Tabs
                             value={selected}
-                            onValueChange={(v) => setSelected((v as "1995" | "2010") ?? "1995")}
+                            onValueChange={(v) => setSelected((v as "1995" | "2010" | "2040") ?? "1995")}
                         >
-                            <TabsList className="grid grid-cols-2 h-8">
-                                <TabsTrigger value="1995" className="text-xs px-2">vs 1995年</TabsTrigger>
-                                <TabsTrigger value="2010" className="text-xs px-2">vs 2010年</TabsTrigger>
+                            <TabsList className="grid grid-cols-3 h-8">
+                                <TabsTrigger value="1995" className="text-xs px-2">vs 1995</TabsTrigger>
+                                <TabsTrigger value="2010" className="text-xs px-2">vs 2010</TabsTrigger>
+                                <TabsTrigger value="2040" className="text-xs px-2">vs 2040</TabsTrigger>
                             </TabsList>
                         </Tabs>
                     </div>
@@ -278,7 +324,7 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
                             <ArrowRight className="w-5 h-5 text-muted-foreground/50" />
 
                             <div className="text-center flex-1">
-                                <p className="text-xs text-muted-foreground font-medium mb-1">2025年</p>
+                                <p className="text-xs text-muted-foreground font-medium mb-1">{selectedComparison.currentYearLabel ?? "2025年"}</p>
                                 <p className="text-lg font-bold text-slate-900">
                                     {(selectedComparison.currentNetIncome / 10000).toLocaleString()}
                                     <span className="text-xs font-normal ml-0.5">万円</span>
