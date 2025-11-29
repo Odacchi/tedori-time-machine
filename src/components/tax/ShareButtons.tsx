@@ -59,7 +59,7 @@ export function ShareButtons({ result1995, result2025, variant = "footer", class
     return (
         <div className={cn(
             "flex gap-3",
-            isHero ? "flex-row items-center" : "flex-col",
+            isHero ? "flex-row items-center flex-wrap" : "flex-col",
             className
         )}>
             <div className={cn(
