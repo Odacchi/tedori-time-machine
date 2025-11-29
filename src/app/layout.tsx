@@ -15,13 +15,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const baseDescription =
+  "同じ年収でも、過去・現在・未来で手取りがどれだけ変わるかを比較できる「手取りタイムマシン」。額面年収を入れるだけで、1995・2010・2025・将来シナリオ2040年の手取りや税金・社会保険料、会社負担分を一目で比較できます。";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: "手取りタイムマシン",
     template: "%s | 手取りタイムマシン",
   },
-  description: "同じ年収で、1995・2010・2025の手取りと人件費を一発比較",
+  description: baseDescription,
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -29,7 +32,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "手取りタイムマシン",
-    description: "同じ年収で、1995・2010・2025の手取りと人件費を一発比較",
+    description: baseDescription,
     url: "/",
     siteName: "手取りタイムマシン",
     type: "website",
@@ -38,14 +41,14 @@ export const metadata: Metadata = {
         url: "/ogp-default.png",
         width: 1200,
         height: 630,
-        alt: "手取りタイムマシン",
+        alt: "手取りタイムマシン - 同じ年収でも、過去・現在・未来で手取りはどれだけ変わる？",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "手取りタイムマシン",
-    description: "同じ年収で、1995・2010・2025の手取りと人件費を一発比較",
+    description: baseDescription,
     images: ["/ogp-default.png"],
   },
   alternates: {
@@ -60,8 +63,7 @@ const jsonLd = {
   url: siteUrl,
   inLanguage: "ja-JP",
   applicationCategory: "FinanceApplication",
-  description:
-    "同じ年収で、1995・2010・2025の手取りと人件費を一発比較",
+  description: baseDescription,
 };
 
 export default function RootLayout({
@@ -78,7 +80,7 @@ export default function RootLayout({
         />
         <meta
           name="keywords"
-          content="手取り, 年収, 社会保険料, 税金, シミュレーション, 所得税, 住民税, 日本, 1995, 2010, 2025"
+          content="手取りタイムマシン, 手取り, 年収, 社会保険料, 税金, シミュレーション, 所得税, 住民税, 日本, 1995年, 2010年, 2025年, 2040年, 将来シナリオ"
         />
       </head>
       <body
