@@ -61,3 +61,25 @@ test("2025: no spouse deduction when spouse is 'none' (12.0M)", () => {
     // 配偶者あり12.0M時（8,187,861）と同額＝別テストで控除が既に外れていることを確認
     assert.equal(result.netIncome, 8_187_861);
 });
+
+test("2040: social insurance is 1.6x of 2025", () => {
+    const input2025 = { ...baseInput, annualSalary: 6_000_000 };
+    const result2025 = calculateForPreset(input2025, "2025").breakdown;
+    const result2040 = calculateForPreset(input2025, "2040").breakdown;
+
+    // 2025 Social Insurance
+    const social2025 = result2025.employeeSocialInsurance;
+    // 2040 Social Insurance should be ~1.6x
+    const social2040 = result2040.employeeSocialInsurance;
+
+    // Allow small rounding diffs.
+    // Note: Unemployment insurance (0.6%) is NOT multiplied by 1.6, so the total ratio is slightly less than 1.6.
+    // 2025 Rate (Over 40): 9.15 + 5.0 + 1.0 + 0.6 = 15.75%
+    // 2040 Rate (Over 40): (9.15 + 5.0 + 1.0)*1.6 + 0.6 = 24.24 + 0.6 = 24.84%
+    // Ratio: 24.84 / 15.75 = 1.5771...
+    const ratio = social2040 / social2025;
+    assert.ok(ratio > 1.57 && ratio < 1.58, `Ratio ${ratio} should be close to 1.577`);
+
+    // Net income should be lower
+    assert.ok(result2040.netIncome < result2025.netIncome);
+});

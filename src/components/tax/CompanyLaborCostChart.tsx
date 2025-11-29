@@ -27,9 +27,10 @@ type Props = {
     data1995: LaborCostData;
     data2010: LaborCostData;
     data2025: LaborCostData;
+    data2040: LaborCostData;
 };
 
-export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
+export function CompanyLaborCostChart({ data1995, data2010, data2025, data2040 }: Props) {
     const series = [
         { key: "net", name: "手取り", color: "#8aa3f5" },
         { key: "incomeTax", name: "所得税", color: "#6b7fd7" },
@@ -42,6 +43,7 @@ export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
         { name: "1995年", ...data1995 },
         { name: "2010年", ...data2010 },
         { name: "2025年", ...data2025 },
+        { name: "2040年", ...data2040 },
     ];
 
     const withTotal = data.map((item) => ({
@@ -52,7 +54,7 @@ export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
     const totalFormatter = (value: number) => `${(value / 10000).toFixed(1)}万`;
 
     return (
-        <Card className="w-full shadow-sm">
+        <Card className="w-full shadow-sm gap-0">
             <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-base">
                     <Briefcase className="w-5 h-5 text-slate-500" />
@@ -84,12 +86,12 @@ export function CompanyLaborCostChart({ data1995, data2010, data2025 }: Props) {
                                 width={60}
                                 tick={{ fontSize: 12 }}
                                 tickLine={false}
-                            axisLine={false}
-                        />
-                        <Legend
-                            itemSorter={null}
-                            wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }}
-                        />
+                                axisLine={false}
+                            />
+                            <Legend
+                                itemSorter={null}
+                                wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }}
+                            />
                             <Tooltip
                                 formatter={(value: number, key) => {
                                     const label = key as keyof LaborCostData;

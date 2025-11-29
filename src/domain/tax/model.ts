@@ -1,5 +1,5 @@
 /** 比較対象となる税制年のプリセット識別子 */
-export type TaxYearPreset = "1995" | "2010" | "2025";
+export type TaxYearPreset = "1995" | "2010" | "2025" | "2040";
 
 /** 入力として受け取る給与所得者の属性 */
 export type TaxInput = {

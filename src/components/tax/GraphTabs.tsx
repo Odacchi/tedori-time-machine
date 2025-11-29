@@ -12,9 +12,11 @@ type Props = {
     rates1995: { gross: number; labor: number };
     rates2010: { gross: number; labor: number };
     rates2025: { gross: number; labor: number };
+    rates2040: { gross: number; labor: number };
     laborCost1995: { net: number; incomeTax: number; residentTax: number; employeeSocial: number; employerSocial: number };
     laborCost2010: { net: number; incomeTax: number; residentTax: number; employeeSocial: number; employerSocial: number };
     laborCost2025: { net: number; incomeTax: number; residentTax: number; employeeSocial: number; employerSocial: number };
+    laborCost2040: { net: number; incomeTax: number; residentTax: number; employeeSocial: number; employerSocial: number };
 };
 
 export function GraphTabs({
@@ -22,9 +24,11 @@ export function GraphTabs({
     rates1995,
     rates2010,
     rates2025,
+    rates2040,
     laborCost1995,
     laborCost2010,
     laborCost2025,
+    laborCost2040,
 }: Props) {
     return (
         <Card>
@@ -44,6 +48,7 @@ export function GraphTabs({
                             rates1995={rates1995}
                             rates2010={rates2010}
                             rates2025={rates2025}
+                            rates2040={rates2040}
                         />
                     </TabsContent>
 
@@ -52,6 +57,7 @@ export function GraphTabs({
                             data1995={laborCost1995}
                             data2010={laborCost2010}
                             data2025={laborCost2025}
+                            data2040={laborCost2040}
                         />
                     </TabsContent>
                 </Tabs>

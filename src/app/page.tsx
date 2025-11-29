@@ -33,31 +33,50 @@ function TedoriTimeMachine() {
   const result1995 = useMemo(() => calculateForPreset(input, "1995"), [input]);
   const result2010 = useMemo(() => calculateForPreset(input, "2010"), [input]);
   const result2025 = useMemo(() => calculateForPreset(input, "2025"), [input]);
+  const result2040 = useMemo(() => calculateForPreset(input, "2040"), [input]);
 
-  // Diff metrics for highlight (1995 vs 2025, 2010 vs 2025)
+  // Diff metrics for highlight (1995 vs 2025, 2010 vs 2025, 2040 vs 2025/2040)
   const comparisons = useMemo(() => {
     const buildComparison = (
       base: ReturnType<typeof calculateForPreset>,
       label: string,
-      baseYear: "1995" | "2010"
+      baseYear: "1995" | "2010" | "2040"
     ) => {
-      const diffNet = result2025.breakdown.netIncome - base.breakdown.netIncome;
-      const grossRateBase = base.breakdown.netRateOnGross;
-      const laborRateBase = base.breakdown.netRateOnLaborCost;
+      const isFuture = baseYear === "2040";
+
+      // 1995/2010: base -> 2025
+      // 2040: 2025 -> 2040（将来シナリオの落ち込みを見る）
+      const baseData = isFuture ? result2025 : base;
+      const currentData = isFuture ? result2040 : result2025;
+
+      const diffNet = currentData.breakdown.netIncome - baseData.breakdown.netIncome;
+      const grossRateBase = baseData.breakdown.netRateOnGross;
+      const laborRateBase = baseData.breakdown.netRateOnLaborCost;
+
       return {
         baseYear,
-        label,
-        baseNetIncome: base.breakdown.netIncome,
-        currentNetIncome: result2025.breakdown.netIncome,
-        baseLaborCost: base.breakdown.totalLaborCost,
-        currentLaborCost: result2025.breakdown.totalLaborCost,
+        label: isFuture ? "2025年" : label,
+        currentYearLabel: isFuture ? "2040年" : "2025年",
+        baseNetIncome: baseData.breakdown.netIncome,
+        currentNetIncome: currentData.breakdown.netIncome,
+        baseLaborCost: baseData.breakdown.totalLaborCost,
+        currentLaborCost: currentData.breakdown.totalLaborCost,
         diffNet,
-        percentDownOnGross: grossRateBase > 0 ? (result2025.breakdown.netRateOnGross / grossRateBase - 1) * 100 : 0,
-        percentDownOnLaborCost: laborRateBase > 0 ? (result2025.breakdown.netRateOnLaborCost / laborRateBase - 1) * 100 : 0,
+        percentDownOnGross:
+          grossRateBase > 0
+            ? (currentData.breakdown.netRateOnGross / grossRateBase - 1) * 100
+            : 0,
+        percentDownOnLaborCost:
+          laborRateBase > 0
+            ? (currentData.breakdown.netRateOnLaborCost / laborRateBase - 1) * 100
+            : 0,
         burdenDiff: {
-          incomeTax: result2025.breakdown.incomeTax - base.breakdown.incomeTax,
-          residentTax: result2025.breakdown.residentTax - base.breakdown.residentTax,
-          social: result2025.breakdown.employeeSocialInsurance - base.breakdown.employeeSocialInsurance,
+          incomeTax: currentData.breakdown.incomeTax - baseData.breakdown.incomeTax,
+          residentTax:
+            currentData.breakdown.residentTax - baseData.breakdown.residentTax,
+          social:
+            currentData.breakdown.employeeSocialInsurance -
+            baseData.breakdown.employeeSocialInsurance,
         },
       };
     };
@@ -65,8 +84,9 @@ function TedoriTimeMachine() {
     return [
       buildComparison(result1995, "1995年頃", "1995"),
       buildComparison(result2010, "2010年頃", "2010"),
+      buildComparison(result2040, "2040年", "2040"),
     ];
-  }, [result1995, result2010, result2025]);
+  }, [result1995, result2010, result2025, result2040]);
 
   // Current URL for sharing
   const [currentUrl, setCurrentUrl] = useState("");
@@ -80,43 +100,43 @@ function TedoriTimeMachine() {
         {/* Hero Section */}
         <section className="space-y-6">
           <div className="relative overflow-hidden rounded-2xl border bg-linear-to-br from-[#dfe8ff] via-white to-[#ffe5ec] px-6 md:px-10 py-6 shadow-sm isolate">
-            <div className="absolute inset-0 bg-white/60 pointer-events-none z-0" aria-hidden />
-            <div className="absolute -left-16 -top-12 h-52 w-52 rounded-full bg-[#cde3ff] opacity-35 blur-xl z-0" aria-hidden />
-            <div className="absolute -bottom-24 right-6 h-64 w-64 rounded-full bg-[#ffd6dc] opacity-35 blur-2xl z-0" aria-hidden />
+            <div
+              className="absolute inset-0 bg-white/60 pointer-events-none z-0"
+              aria-hidden
+            />
+            <div
+              className="absolute -left-16 -top-12 h-52 w-52 rounded-full bg-[#cde3ff] opacity-35 blur-xl z-0"
+              aria-hidden
+            />
+            <div
+              className="absolute -bottom-24 right-6 h-64 w-64 rounded-full bg-[#ffd6dc] opacity-35 blur-2xl z-0"
+              aria-hidden
+            />
 
             <div className="max-w-6xl mx-auto space-y-6 relative z-10">
               {/* 肩書きラベル */}
               <div className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-900 shadow-sm backdrop-blur">
                 <span>手取りタイムマシン</span>
                 <span className="h-3 w-px bg-emerald-200" />
-                <span>1995 / 2010 / 2025 比較シミュレーター</span>
+                <span>過去・現在・未来の手取り比較シミュレーター</span>
                 <span className="ml-1 inline-flex items-center rounded-full border border-slate-300 bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-slate-800">
                   BETA
                 </span>
               </div>
 
-              <div className="space-y-4 text-left">
+              <div className="space-y-5 md:space-y-6 text-left">
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight max-w-4xl">
-                  同じ年収でも、時代で
+                  同じ年収でも、過去・現在・未来で
                   <br className="hidden md:block" />
                   手取りはどれだけ変わる？
                 </h1>
 
-                <p className="text-muted-foreground leading-relaxed text-base md:text-lg max-w-5xl">
-                  年少扶養控除の廃止や社会保険料率の上昇などで、1995・2010・2025の手取りは大きく変化しています。
-                  会社が負担する社会保険料を含めた「人件費」のうち、どれだけが手取りになるのかも一目で比較できます。
+                <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-4xl">
+                  年少扶養控除の廃止や社会保険料率の上昇などで、1995→2010→2025と手取りは大きく変化してきました。
+                  手取りタイムマシンでは、将来シナリオの2040年も含めて、額面年収を入れるだけで「手取り額」と「税金・社会保険料などの内訳」、さらに会社が負担する分も含めた人件費の配分を、数値とグラフで一目で比較できます。
                 </p>
 
                 <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
-                  <div className="flex flex-wrap items-center gap-2 text-sm">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 border text-emerald-800">
-                      介護保険料や扶養控除の変化をざっくり反映
-                    </span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 border text-amber-800">
-                      所得税・住民税・社会保険の簡易モデル
-                    </span>
-                  </div>
-
                   {/* Desktop Share Buttons */}
                   <div className="hidden md:block">
                     <ShareButtons
@@ -131,7 +151,6 @@ function TedoriTimeMachine() {
             </div>
           </div>
         </section>
-
 
         {/* Input + Highlight Section */}
         <section className="grid gap-6 md:grid-cols-2">
@@ -149,10 +168,11 @@ function TedoriTimeMachine() {
         {/* Comparison Cards Section */}
         <section className="space-y-4">
           <h2 className="text-xl font-bold">詳細比較</h2>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-4">
             <TaxResultCard result={result1995} title="1995年頃" />
             <TaxResultCard result={result2010} title="2010年頃" />
             <TaxResultCard result={result2025} title="現在の制度（2025年頃）" />
+            <TaxResultCard result={result2040} title="2040年（将来シナリオ）" />
           </div>
         </section>
 
@@ -160,9 +180,22 @@ function TedoriTimeMachine() {
         <section className="space-y-8">
           <GraphTabs
             input={input}
-            rates1995={{ gross: result1995.breakdown.netRateOnGross, labor: result1995.breakdown.netRateOnLaborCost }}
-            rates2010={{ gross: result2010.breakdown.netRateOnGross, labor: result2010.breakdown.netRateOnLaborCost }}
-            rates2025={{ gross: result2025.breakdown.netRateOnGross, labor: result2025.breakdown.netRateOnLaborCost }}
+            rates1995={{
+              gross: result1995.breakdown.netRateOnGross,
+              labor: result1995.breakdown.netRateOnLaborCost,
+            }}
+            rates2010={{
+              gross: result2010.breakdown.netRateOnGross,
+              labor: result2010.breakdown.netRateOnLaborCost,
+            }}
+            rates2025={{
+              gross: result2025.breakdown.netRateOnGross,
+              labor: result2025.breakdown.netRateOnLaborCost,
+            }}
+            rates2040={{
+              gross: result2040.breakdown.netRateOnGross,
+              labor: result2040.breakdown.netRateOnLaborCost,
+            }}
             laborCost1995={{
               net: result1995.breakdown.netIncome,
               incomeTax: result1995.breakdown.incomeTax,
@@ -184,6 +217,13 @@ function TedoriTimeMachine() {
               employeeSocial: result2025.breakdown.employeeSocialInsurance,
               employerSocial: result2025.breakdown.employerSocialInsurance,
             }}
+            laborCost2040={{
+              net: result2040.breakdown.netIncome,
+              incomeTax: result2040.breakdown.incomeTax,
+              residentTax: result2040.breakdown.residentTax,
+              employeeSocial: result2040.breakdown.employeeSocialInsurance,
+              employerSocial: result2040.breakdown.employerSocialInsurance,
+            }}
           />
         </section>
 
@@ -195,10 +235,7 @@ function TedoriTimeMachine() {
               面白い／役に立つと思ったら、ぜひSNSで紹介してください👐
             </p>
           </div>
-          <ShareButtons
-            result1995={result1995}
-            result2025={result2025}
-          />
+          <ShareButtons result1995={result1995} result2025={result2025} />
         </section>
 
         {/* About Tool */}
@@ -207,6 +244,10 @@ function TedoriTimeMachine() {
           <p className="text-sm text-muted-foreground">
             「手取りタイムマシン」は、社会保険料や税制の変化による“手取りの目減り”を可視化するために個人で開発したものです。
             住む地域による住民税の差は小さいため、本ツールでは全国一律でモデル化しています。
+          </p>
+          <p className="text-sm text-muted-foreground">
+            1995年・2010年・2025年は、当時の税制・社会保険料率を参考にした簡易モデルに基づいて計算しています。
+            2040年は、現在の傾向を踏まえた仮の「将来シナリオ」として設定したものであり、実際の制度を予測・保証するものではありません。
           </p>
           <p className="text-sm text-muted-foreground">
             ご意見・バグ報告などは GitHub の Issue/PR でお願いします（
@@ -220,7 +261,14 @@ function TedoriTimeMachine() {
               <span>GitHubリポジトリ</span>
             </a>
             ）。開発者は X（
-            <a href="https://x.com/is_odacchi" className="underline" target="_blank" rel="noreferrer">@is_odacchi</a>
+            <a
+              href="https://x.com/is_odacchi"
+              className="underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              @is_odacchi
+            </a>
             ）でも発信していますが、正式な窓口は GitHub が確実です。
           </p>
         </section>
@@ -233,7 +281,8 @@ function TedoriTimeMachine() {
             税務上の判断が必要な場合は、税理士などの専門家にご相談ください。
           </p>
           <p className="mt-3">
-            ※本ツールは、1995年・2010年・2025年の税制・社会保険料率に基づいて計算しています。
+            ※本ツールは、1995年・2010年・2025年の税制・社会保険料率を参考にしたモデルと、
+            現在の傾向を踏まえた2040年の将来シナリオに基づいて計算しています。
           </p>
         </footer>
       </div>

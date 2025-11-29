@@ -17,9 +17,10 @@ type Props = {
     rates1995: { gross: number; labor: number };
     rates2010: { gross: number; labor: number };
     rates2025: { gross: number; labor: number };
+    rates2040: { gross: number; labor: number };
 };
 
-export function NetRateComparisonChart({ rates1995, rates2010, rates2025 }: Props) {
+export function NetRateComparisonChart({ rates1995, rates2010, rates2025, rates2040 }: Props) {
     const data = [
         {
             name: "1995年",
@@ -36,10 +37,15 @@ export function NetRateComparisonChart({ rates1995, rates2010, rates2025 }: Prop
             gross: Math.round(rates2025.gross * 1000) / 10,
             labor: Math.round(rates2025.labor * 1000) / 10,
         },
+        {
+            name: "2040年",
+            gross: Math.round(rates2040.gross * 1000) / 10,
+            labor: Math.round(rates2040.labor * 1000) / 10,
+        },
     ];
 
     return (
-        <Card className="w-full shadow-sm">
+        <Card className="w-full shadow-sm gap-0">
             <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-base">
                     <BarChart3 className="w-5 h-5 text-slate-500" />

@@ -2,6 +2,7 @@ import { TaxInput, TaxResult, TaxYearPreset, TaxRuleSet } from "./model";
 import { rules1995 } from "./rules/1995";
 import { rules2010 } from "./rules/2010";
 import { rules2025 } from "./rules/2025";
+import { rules2040 } from "./rules/2040";
 
 function getSalaryIncomeDeduction(salary: number, rules: TaxRuleSet): number {
     const table = rules.salaryIncomeDeductionTable;
@@ -50,6 +51,7 @@ export function calculateForPreset(input: TaxInput, preset: TaxYearPreset): TaxR
         case "1995": rules = rules1995; break;
         case "2010": rules = rules2010; break;
         case "2025": rules = rules2025; break;
+        case "2040": rules = rules2040; break;
     }
 
     const { annualSalary } = input;
