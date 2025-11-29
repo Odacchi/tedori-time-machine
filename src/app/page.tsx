@@ -99,51 +99,61 @@ function TedoriTimeMachine() {
       <div className="mx-auto max-w-6xl px-4 md:px-6 py-8 space-y-8">
         {/* Hero Section */}
         <section className="space-y-6">
-          <div className="relative overflow-hidden rounded-2xl border bg-linear-to-br from-[#dfe8ff] via-white to-[#ffe5ec] px-6 md:px-10 py-6 shadow-sm isolate">
+          <div className="relative overflow-hidden rounded-3xl border bg-linear-to-br from-[#f0f4ff] via-white to-[#fff0f5] shadow-xs isolate">
+            {/* Background Effects */}
             <div
-              className="absolute inset-0 bg-white/60 pointer-events-none z-0"
+              className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light pointer-events-none z-0"
               aria-hidden
             />
             <div
-              className="absolute -left-16 -top-12 h-52 w-52 rounded-full bg-[#cde3ff] opacity-35 blur-xl z-0"
+              className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-blue-100/50 blur-3xl z-0"
               aria-hidden
             />
             <div
-              className="absolute -bottom-24 right-6 h-64 w-64 rounded-full bg-[#ffd6dc] opacity-35 blur-2xl z-0"
+              className="absolute -bottom-32 -right-20 h-96 w-96 rounded-full bg-red-100/50 blur-3xl z-0"
               aria-hidden
             />
 
-            <div className="max-w-6xl mx-auto space-y-6 relative z-10">
-              {/* 肩書きラベル */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-900 shadow-sm backdrop-blur">
-                <span>手取りタイムマシン</span>
-                <span className="h-3 w-px bg-emerald-200" />
-                <span>過去・現在・未来の手取り比較シミュレーター</span>
-                <span className="ml-1 inline-flex items-center rounded-full border border-slate-300 bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-slate-800">
-                  BETA
-                </span>
-              </div>
+            <div className="relative z-10 px-6 py-10 md:px-12 md:py-14">
+              <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start justify-between">
 
-              <div className="space-y-5 md:space-y-6 text-left">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight max-w-4xl">
-                  同じ年収でも、過去・現在・未来で
-                  <br className="hidden md:block" />
-                  手取りはどれだけ変わる？
-                </h1>
+                {/* Left Content */}
+                <div className="space-y-6 max-w-3xl flex-1">
+                  {/* Badge */}
+                  <div className="inline-flex items-center gap-2.5 rounded-full border border-slate-200/60 bg-white/60 px-3 py-1 text-xs font-medium text-slate-600 shadow-xs backdrop-blur-md">
+                    <span className="font-bold text-slate-800 tracking-tight">手取りタイムマシン</span>
+                    <span className="h-3 w-px bg-slate-300" />
+                    <span>過去・現在・未来の手取り比較</span>
+                    <span className="ml-1 inline-flex items-center rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                      Beta
+                    </span>
+                  </div>
 
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-4xl">
-                  年少扶養控除の廃止や社会保険料率の上昇などで、1995→2010→2025と手取りは大きく変化してきました。
-                  手取りタイムマシンでは、将来シナリオの2040年も含めて、額面年収を入れるだけで「手取り額」と「税金・社会保険料などの内訳」、さらに会社が負担する分も含めた人件費の配分を、数値とグラフで一目で比較できます。
-                </p>
+                  {/* Heading */}
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+                    同じ年収でも、
+                    <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-indigo-600">
+                      過去・現在・未来
+                    </span>
+                    で手取りはどれだけ変わる？
+                  </h1>
 
-                <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
-                  {/* Desktop Share Buttons */}
-                  <div className="hidden md:block">
+                  {/* Description */}
+                  <p className="text-sm md:text-base text-slate-600 leading-relaxed max-w-2xl">
+                    年少扶養控除の廃止や社会保険料率の上昇などで、手取りは大きく変化してきました。
+                    <br className="hidden md:block" />
+                    手取りタイムマシンでは、額面年収を入れるだけで「手取り額」と「税金・社会保険料などの内訳」を、
+                    <span className="font-semibold text-slate-800">1995年・2010年・2025年・2040年</span>
+                    の4つの時点で一瞬で比較できます。
+                  </p>
+
+                  {/* CTA Buttons */}
+                  <div className="pt-2">
                     <ShareButtons
                       result1995={result1995}
                       result2025={result2025}
                       variant="hero"
-                      className="scale-90 origin-right"
+                      className="origin-left scale-100"
                     />
                   </div>
                 </div>
