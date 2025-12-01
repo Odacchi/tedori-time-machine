@@ -34,7 +34,11 @@ export function ComparisonChart({ scenarios, yearLabel }: Props) {
         net: s.result.breakdown.netIncome,
         tax: s.result.breakdown.incomeTax + s.result.breakdown.residentTax,
         social: s.result.breakdown.employeeSocialInsurance,
-        total: s.result.breakdown.netIncome + s.result.breakdown.incomeTax + s.result.breakdown.residentTax + s.result.breakdown.employeeSocialInsurance,
+        total:
+            s.result.breakdown.netIncome +
+            s.result.breakdown.incomeTax +
+            s.result.breakdown.residentTax +
+            s.result.breakdown.employeeSocialInsurance,
     }));
 
     const series = [
@@ -62,26 +66,29 @@ export function ComparisonChart({ scenarios, yearLabel }: Props) {
                         <BarChart
                             data={data}
                             layout="vertical"
-                            margin={{ top: 16, right: 36, left: 0, bottom: 12 }}
+                            // 左にラベル用の余白だけ確保
+                            margin={{ top: 16, right: 36, left: 100, bottom: 12 }}
                             stackOffset="sign"
                         >
                             <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                             <XAxis
                                 type="number"
                                 tickFormatter={(v) => `${(v / 10000).toFixed(0)}万`}
-                                domain={[0, 'auto']}
+                                domain={[0, "auto"]}
                                 fontSize={12}
                             />
+                            {/* 軸は位置決めだけ。ラベルは描かない */}
                             <YAxis
                                 type="category"
                                 dataKey="name"
-                                width={100}
-                                tick={{ fontSize: 12 }}
+                                width={0}
+                                tick={false}
                                 tickLine={false}
                                 axisLine={false}
                             />
+
                             <Legend
-                                wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }}
+                                wrapperStyle={{ fontSize: "11px", paddingTop: "10px" }}
                                 itemSorter={null}
                             />
                             <Tooltip
@@ -94,12 +101,14 @@ export function ComparisonChart({ scenarios, yearLabel }: Props) {
                                     return [`${value.toLocaleString()}円`, labelMap[key as string] ?? key];
                                 }}
                                 cursor={{ fill: "transparent" }}
-                                contentStyle={{ borderRadius: '8px', fontSize: '12px' }}
+                                contentStyle={{ borderRadius: "8px", fontSize: "12px" }}
                             />
+
                             {series.map((item, idx) => {
-                                // Round corners for the last item (rightmost in stacked bar)
                                 const isLast = idx === series.length - 1;
-                                const radius: [number, number, number, number] = isLast ? [0, 4, 4, 0] : [0, 0, 0, 0];
+                                const radius: [number, number, number, number] = isLast
+                                    ? [0, 4, 4, 0]
+                                    : [0, 0, 0, 0];
 
                                 return (
                                     <Bar
@@ -111,6 +120,7 @@ export function ComparisonChart({ scenarios, yearLabel }: Props) {
                                         radius={radius}
                                         barSize={32}
                                     >
+                                        {/* 中央の「◯◯万」ラベル（これまで通り） */}
                                         <LabelList
                                             dataKey={item.key}
                                             content={({ x, y, width, height, value }) => {
@@ -131,6 +141,28 @@ export function ComparisonChart({ scenarios, yearLabel }: Props) {
                                                 );
                                             }}
                                         />
+
+                                        {/* 一番左側のシナリオ名ラベルは net のバーにだけ付ける */}
+                                        {item.key === "net" && (
+                                            <LabelList
+                                                dataKey="name"
+                                                content={({ y, height, value }) => {
+                                                    if (y == null || height == null) return null;
+                                                    return (
+                                                        <text
+                                                            x={8}
+                                                            y={Number(y) + Number(height) / 2}
+                                                            textAnchor="start"
+                                                            fill="#64748b"
+                                                            fontSize={12}
+                                                            dominantBaseline="middle"
+                                                        >
+                                                            {String(value)}
+                                                        </text>
+                                                    );
+                                                }}
+                                            />
+                                        )}
                                     </Bar>
                                 );
                             })}
@@ -140,7 +172,9 @@ export function ComparisonChart({ scenarios, yearLabel }: Props) {
 
                 {/* Legend / Summaries */}
                 <div className="bg-slate-50 rounded-lg border p-4 space-y-3">
-                    <h3 className="text-xs font-semibold text-muted-foreground mb-2">比較シナリオの条件一覧</h3>
+                    <h3 className="text-xs font-semibold text-muted-foreground mb-2">
+                        比較シナリオの条件一覧
+                    </h3>
                     {scenarios.map((scenario) => (
                         <TrialConditionsSummary
                             key={scenario.id}
