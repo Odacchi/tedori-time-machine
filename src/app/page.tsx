@@ -11,6 +11,7 @@ import { DiffHighlightCard } from "@/components/tax/DiffHighlightCard";
 import { GraphTabs } from "@/components/tax/GraphTabs";
 import { ShareButtons } from "@/components/tax/ShareButtons";
 import { GithubIcon } from "@/components/icons/GithubIcon";
+import Link from "next/link";
 
 function TedoriTimeMachine() {
   const router = useRouter();
@@ -147,6 +148,20 @@ function TedoriTimeMachine() {
                     の4つの時点で一瞬で比較できます。
                   </p>
 
+                  {/* こだわり比較モードへのさりげない導線 */}
+                  <p className="text-xs text-slate-500 mt-1">
+                    条件を変えたパターン同士も比べてみたい方は、
+                    {" "}
+                    <Link
+                      href="/compare"
+                      className="underline underline-offset-2 decoration-dotted hover:text-slate-700"
+                    >
+                      こだわり比較モード（最大4パターン比較）
+                    </Link>
+                    {" "}
+                    もお試しください。
+                  </p>
+
                   {/* CTA Buttons */}
                   <div className="pt-2 hidden sm:block">
                     <ShareButtons
@@ -270,7 +285,6 @@ function TedoriTimeMachine() {
               <GithubIcon className="w-4 h-4" aria-hidden="true" />
               <span>GitHubリポジトリ</span>
             </a>
-            ）。開発者は X（
             <a
               href="https://x.com/is_odacchi"
               className="underline"
@@ -281,6 +295,14 @@ function TedoriTimeMachine() {
             </a>
             ）でも発信していますが、正式な窓口は GitHub が確実です。
           </p>
+          <div className="pt-2 border-t border-slate-200/60 mt-4">
+            <p className="text-xs text-muted-foreground">
+              <span className="font-bold text-slate-500">開発者向け機能：</span>
+              <Link href="/compare" className="underline hover:text-slate-800 ml-1">
+                手取りシミュレーション比較（複数シナリオ比較）
+              </Link>
+            </p>
+          </div>
         </section>
 
         {/* Footer Disclaimer */}

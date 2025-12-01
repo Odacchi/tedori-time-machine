@@ -8,7 +8,12 @@ type Props = {
     className?: string;
 };
 
-export function TrialConditionsSummary({ input, className }: Props) {
+export function TrialConditionsSummary({
+    input,
+    className,
+    label,
+    showPrefix = true,
+}: Props & { label?: string; showPrefix?: boolean }) {
     const totalChildren = input.children.under16 + input.children.age16to18 + input.children.age19to23;
     const spouseText = input.spouse === "dependent" ? "既婚（配偶者扶養あり）" : "独身（配偶者扶養なし）";
     const careText = input.isOver40 ? "介護保険料：あり（40歳以上）" : "介護保険料：なし（40歳未満）";
@@ -18,13 +23,17 @@ export function TrialConditionsSummary({ input, className }: Props) {
     const pills = [salaryText, spouseText, childrenText, careText];
 
     return (
-        <div className={cn("flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-3", className)}>
-            <span className="font-semibold text-foreground text-xs sm:text-sm">試算条件：</span>
+        <div className={cn("flex flex-col sm:flex-row sm:items-center gap-2 text-sm text-muted-foreground", className)}>
+            {(showPrefix || label) && (
+                <span className="font-semibold text-foreground text-xs sm:text-sm whitespace-nowrap">
+                    {label || "試算条件："}
+                </span>
+            )}
             <div className="flex flex-wrap items-center gap-2">
                 {pills.map((text) => (
                     <span
                         key={text}
-                        className="rounded-full border bg-muted px-3 py-1 text-xs font-medium text-foreground/80"
+                        className="rounded-full border bg-muted px-3 py-1 text-xs font-medium text-foreground/80 whitespace-nowrap"
                     >
                         {text}
                     </span>
