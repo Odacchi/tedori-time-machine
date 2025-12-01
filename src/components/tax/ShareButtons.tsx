@@ -36,7 +36,7 @@ export function ShareButtons({ result1995, result2025, variant = "footer", class
     const netRateLabor25 = result2025.breakdown.netRateOnLaborCost;
     const percentDownOnLaborCost = (netRateLabor25 / netRateLabor95 - 1) * 100;
 
-    const text = `「もし同じ年収で、別の時代に生きていたら手取りはいくら？」\n1995・2010・2025の手取りをグラフで一発比較できる「手取りタイムマシン」。\n税金・社会保険料の変化がひと目でわかります。\n#手取りタイムマシン\n\n`;
+    const text = `「もし同じ年収で、別の時代に生きていたら手取りはいくら？」\n過去・現在・未来の手取りをグラフで一発比較できる「手取りタイムマシン」。\n税金・社会保険料の変化がひと目でわかります。\n#手取りタイムマシン\n\n`;
 
     // Use baseUrl for sharing to introduce the tool
     const shareUrl = baseUrl;

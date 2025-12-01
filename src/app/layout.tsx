@@ -18,6 +18,8 @@ const geistMono = Geist_Mono({
 const baseDescription =
   "同じ年収でも、過去・現在・未来で手取りがどれだけ変わるかを比較できる「手取りタイムマシン」。額面年収を入れるだけで、1995・2010・2025・将来シナリオ2040年の手取りや税金・社会保険料、会社負担分を一目で比較できます。";
 
+const ogpImage = "/ogp-20251201.png";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/ogp-default.png",
+        url: ogpImage,
         width: 1200,
         height: 630,
         alt: "手取りタイムマシン - 同じ年収でも、過去・現在・未来で手取りはどれだけ変わる？",
@@ -49,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "手取りタイムマシン",
     description: baseDescription,
-    images: ["/ogp-default.png"],
+    images: [ogpImage],
   },
   alternates: {
     canonical: "/",
