@@ -297,7 +297,7 @@ function TedoriTimeMachine() {
           </p>
           <div className="pt-2 border-t border-slate-200/60 mt-4">
             <p className="text-xs text-muted-foreground">
-              <span className="font-bold text-slate-500">開発者向け機能：</span>
+              <span className="font-bold text-slate-500">研究用・検証用機能：</span>
               <Link href="/compare" className="underline hover:text-slate-800 ml-1">
                 手取りシミュレーション比較（複数シナリオ比較）
               </Link>
