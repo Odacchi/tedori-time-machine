@@ -194,13 +194,13 @@ export function ComparisonChart({ scenarios, yearLabel }: Props) {
                         ))}
                     </div>
                 </CardContent>
-                <CardFooter className={cn("pt-0 pb-4", isCapturing && "hidden")} data-ignore-capture="true">
+                {/* <CardFooter className={cn("pt-0 pb-4", isCapturing && "hidden")} data-ignore-capture="true">
                     <SaveImageButton
                         className="w-full text-xs h-9"
                         onClick={() => capture()}
                         isSaving={isSaving}
                     />
-                </CardFooter>
+                </CardFooter> */}
             </Card>
             {isCapturing && (
                 <div className="absolute right-6 bottom-4 text-[11px] font-semibold text-slate-600 pointer-events-none select-none">
