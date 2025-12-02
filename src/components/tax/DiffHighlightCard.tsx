@@ -7,9 +7,10 @@ import { XIcon } from "@/components/tax/XIcon";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { BriefcaseBusiness, ArrowRight, TrendingDown, TrendingUp, Download, User, Users, Baby, ChevronDown } from "lucide-react";
-import { toPng } from "html-to-image";
+import { BriefcaseBusiness, ArrowRight, TrendingDown, TrendingUp, User, Users, Baby, ChevronDown } from "lucide-react";
 import { TaxInput } from "@/domain/tax/model";
+import { useImageCapture } from "@/hooks/useImageCapture";
+import { SaveImageButton } from "@/components/tax/SaveImageButton";
 
 type Props = {
     comparisons: {
@@ -103,10 +104,7 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
     }
 
     const [selected, setSelected] = useState<"1995" | "2010" | "2040">("1995");
-    const [isSaving, setIsSaving] = useState(false);
-    const [isCapturing, setIsCapturing] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
-    const captureRef = useRef<HTMLDivElement>(null);
     const selectedComparison = useMemo(
         () => comparisons.find((c) => c.baseYear === selected) ?? comparisons[0],
         [comparisons, selected]
@@ -167,62 +165,10 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
 
     const shareUrl = currentUrl ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(currentUrl)}` : "#";
 
-    const handleDownloadImage = useCallback(async () => {
-        if (!captureRef.current) return;
-        setIsSaving(true);
-        setIsCapturing(true);
-        // Wait for state update to reflect (hide buttons etc)
-        await new Promise((resolve) => requestAnimationFrame(() => resolve(undefined)));
+    const suffix = selectedComparison.baseYear === "1995" ? "vs-1995" : selectedComparison.baseYear === "2010" ? "vs-2010" : "vs-2040";
+    const fileName = `tedori-highlight-${suffix}.png`;
 
-        try {
-            const dataUrl = await toPng(captureRef.current, {
-                cacheBust: true,
-                pixelRatio: 2,
-                backgroundColor: "#ffffff",
-                filter: (node) => {
-                    if (!(node instanceof HTMLElement)) return true;
-                    return node.dataset.ignoreCapture !== "true";
-                },
-            });
-
-            const suffix = selectedComparison.baseYear === "1995" ? "vs-1995" : selectedComparison.baseYear === "2010" ? "vs-2010" : "vs-2040";
-            const fileName = `tedori-highlight-${suffix}.png`;
-
-            // Detect mobile device
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-            // Try Web Share API only on mobile
-            if (isMobile && navigator.share) {
-                try {
-                    const blob = await (await fetch(dataUrl)).blob();
-                    const file = new File([blob], fileName, { type: "image/png" });
-
-                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                        await navigator.share({
-                            files: [file],
-                            title: '手取りタイムマシン',
-                            text: shareText
-                        });
-                        return; // Success, exit
-                    }
-                } catch (shareError) {
-                    // Share failed or cancelled, fall back to download
-                    console.log("Web Share API failed, falling back to download", shareError);
-                }
-            }
-
-            // Fallback: Download link (Desktop or non-share browsers)
-            const link = document.createElement("a");
-            link.download = fileName;
-            link.href = dataUrl;
-            link.click();
-        } catch (error) {
-            console.error("failed to save highlight card", error);
-        } finally {
-            setIsSaving(false);
-            setIsCapturing(false);
-        }
-    }, [selectedComparison.baseYear, shareText]);
+    const { captureRef, capture, isCapturing, isSaving } = useImageCapture({ fileName });
 
     // Helper to render family icons
     const renderFamilyIcons = () => {
@@ -475,16 +421,11 @@ function DiffHighlightCard({ comparisons, currentUrl, isSalaryZero = false, inpu
                     className={cn("pt-0 pb-4 flex flex-col gap-2", isCapturing && "hidden")}
                     data-ignore-capture="true"
                 >
-                    <Button
-                        variant="secondary"
-                        size="sm"
+                    <SaveImageButton
                         className="w-full text-xs h-9"
-                        onClick={handleDownloadImage}
-                        disabled={isSaving}
-                    >
-                        <Download className="w-4 h-4" />
-                        {isSaving ? "画像を生成中…" : "画像として保存"}
-                    </Button>
+                        onClick={() => capture(shareText)}
+                        isSaving={isSaving}
+                    />
 
                     {currentUrl && (
                         <Button variant="outline" size="sm" asChild className="w-full text-xs h-9">
